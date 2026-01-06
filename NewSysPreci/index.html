@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="pt-BR"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+<!DOCTYPE html><html lang="pt-BR"><head><meta name="x-poe-datastore-behavior" content="local_only"><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://accounts.google.com https://apis.google.com https://www.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com https://accounts.google.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; connect-src 'self' https://accounts.google.com https://www.googleapis.com https://oauth2.googleapis.com; upgrade-insecure-requests; block-all-mixed-content;">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>APS - Sistema de Precificação</title>
@@ -127,7 +127,23 @@
     </style>
 
     <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        // Flag to track Google API load status
+        window.googleApiLoaded = false;
+        window.googleApiLoadError = null;
+
+        function onGoogleApiLoad() {
+            window.googleApiLoaded = true;
+            console.log('Google API loaded successfully');
+            if (window.onGoogleReady) window.onGoogleReady();
+        }
+
+        function onGoogleApiError(e) {
+            window.googleApiLoadError = e || 'Failed to load Google API';
+            console.error('Google API load error:', e);
+        }
+    </script>
+    <script src="https://accounts.google.com/gsi/client" async defer onload="onGoogleApiLoad()" onerror="onGoogleApiError(event)"></script>
     <script src="https://apis.google.com/js/api.js" async defer></script>
 <script src="https://puc.poecdn.net/authenticated_preview_page/syncedState.3f7572448765332f3047.js"></script></head>
 <body class="bg-gray-100 transition-colors duration-200">
@@ -1868,24 +1884,7 @@
             accessToken: null,
 
             init() {
-                this.checkStoredSession();
-            },
-
-            checkStoredSession() {
-                try {
-                    const storedToken = localStorage.getItem('aps_access_token');
-                    const storedUser = localStorage.getItem('aps_user');
-                    const tokenExpiry = localStorage.getItem('aps_token_expiry');
-                    if (storedToken && storedUser && tokenExpiry) {
-                        const expiry = new Date(tokenExpiry);
-                        if (expiry > new Date()) {
-                            this.accessToken = storedToken;
-                            currentUser = JSON.parse(storedUser);
-                            this.onSignInSuccess();
-                            return;
-                        }
-                    }
-                } catch (e) { console.log('No stored session'); }
+                // Always show login overlay - no session persistence in iframe
                 document.getElementById('loginOverlay').classList.remove('hidden');
             },
 
@@ -1900,9 +1899,7 @@
                         callback: (response) => {
                             if (response.error) { this.onSignInError(response.error); return; }
                             this.accessToken = response.access_token;
-                            const expiry = new Date(Date.now() + (response.expires_in * 1000));
-                            localStorage.setItem('aps_access_token', response.access_token);
-                            localStorage.setItem('aps_token_expiry', expiry.toISOString());
+                            // Token stored in memory only (no localStorage in iframe)
                             this.getUserInfo();
                         }
                     });
@@ -1917,7 +1914,7 @@
                     });
                     if (!response.ok) throw new Error('Failed to get user info');
                     currentUser = await response.json();
-                    localStorage.setItem('aps_user', JSON.stringify(currentUser));
+                    // User stored in memory only (no localStorage in iframe)
                     this.onSignInSuccess();
                 } catch (error) { this.onSignInError(error.message); }
             },
@@ -1950,9 +1947,7 @@
 
             signOut() {
                 showConfirmDialog('Deseja realmente sair?', () => {
-                    localStorage.removeItem('aps_access_token');
-                    localStorage.removeItem('aps_user');
-                    localStorage.removeItem('aps_token_expiry');
+                    // Clear in-memory data only (no localStorage in iframe)
                     this.accessToken = null;
                     currentUser = null;
                     isLoggedIn = false;
@@ -3690,7 +3685,7 @@
                             <div>
                                 <div class="flex items-center gap-2 mb-1">
                                     <h3 class="text-xl font-bold text-gray-900 text-gray-900">${pizza.name}</h3>
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full ${pizza.type === 'doce' ? 'bg-gray-100 text-pink-700 dark:bg-pink-900/30 text-gray-600' : 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'}">${pizza.type === 'doce' ? '🍫 Doce' : '🧂 Salgada'}</span>
+                                    <span class="px-2 py-1 text-xs font-medium rounded-full ${pizza.type === 'doce' ? 'bg-gray-100 text-pink-700 dark:bg-pink-900/30 text-gray-600' : 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400'}">${pizza.type === 'doce' ? '���� Doce' : '🧂 Salgada'}</span>
                                 </div>
                                 <p class="text-sm text-gray-500 text-gray-500">${pizza.size}</p>
                             </div>
@@ -4343,7 +4338,7 @@
 
                         ${pizzas.length > 0 ? `
                             <details class="text-sm">
-                                <summary class="cursor-pointer ${colorClasses.text} font-medium hover:opacity-80">📱 Ver Preços das Pizzas (${pizzas.length})</summary>
+                                <summary class="cursor-pointer ${colorClasses.text} font-medium hover:opacity-80">���� Ver Preços das Pizzas (${pizzas.length})</summary>
                                 <div class="mt-3 space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
                                     ${pizzas.map(pizza => {
                                         const tax = platform.pizzaTaxes[pizza.id] || platform.defaultTax;
@@ -6367,20 +6362,43 @@
         // Activate dashboard nav item on load
         document.getElementById('nav-dashboard').classList.add('active');
 
-        // Initialize Google Auth when page loads
+        // Initialize Google Auth when page loads with robust polling
+        function waitForGoogleApi(callback, maxAttempts = 20) {
+            let attempts = 0;
+            const checkGoogle = () => {
+                attempts++;
+                if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
+                    console.log('Google API ready after ' + attempts + ' attempts');
+                    callback(true);
+                } else if (window.googleApiLoadError) {
+                    console.error('Google API load error detected');
+                    callback(false);
+                } else if (attempts >= maxAttempts) {
+                    console.warn('Google API not available after ' + maxAttempts + ' attempts');
+                    callback(false);
+                } else {
+                    setTimeout(checkGoogle, 500);
+                }
+            };
+            checkGoogle();
+        }
+
         window.onload = function() {
-            if (typeof google !== 'undefined' && google.accounts) {
-                GoogleAuth.init();
-            } else {
-                setTimeout(() => {
-                    if (typeof google !== 'undefined' && google.accounts) {
-                        GoogleAuth.init();
-                    } else {
-                        console.warn('Google APIs not available');
-                        GoogleAuth.continueOffline();
-                    }
-                }, 2000);
-            }
+            // Set callback for when Google API loads (if not already loaded)
+            window.onGoogleReady = () => {
+                if (typeof google !== 'undefined' && google.accounts && google.accounts.oauth2) {
+                    GoogleAuth.init();
+                }
+            };
+
+            // Start polling for Google API
+            waitForGoogleApi((success) => {
+                if (success) {
+                    GoogleAuth.init();
+                } else {
+                    GoogleAuth.continueOffline();
+                }
+            });
         };
     </script>
 
