@@ -1,1295 +1,1084 @@
-+    1 <!DOCTYPE html>
-+    2 <html lang="pt-BR">
-+    3 <head>
-+    4     <meta charset="UTF-8">
-+    5     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-+    6     <meta name="description" content="American Pizza Style - Pizzas artesanais no autêntico estilo americano. Massa crocante, recheio generoso e sabor incomparável. Peça agora!">
-+    7     <meta name="keywords" content="pizza americana, pizzaria, delivery pizza, pizza artesanal, pizza NY, pizza Chicago">
-+    8     <meta name="author" content="American Pizza Style">
-+    9     <meta name="robots" content="index, follow">
-+   10     <meta property="og:title" content="American Pizza Style - Autêntica Pizza Americana">
-+   11     <meta property="og:description" content="Experimente o sabor de uma verdadeira pizza americana. Massa artesanal, ingredientes premium e muito sabor!">
-+   12     <meta property="og:type" content="website">
-+   13     <meta property="og:url" content="https://americanpizzastyle.com.br">
-+   14     <title>American Pizza Style | Autêntica Pizza Americana</title>
-+   15     <link rel="canonical" href="https://americanpizzastyle.com.br">
-+   16     <link rel="preconnect" href="https://fonts.googleapis.com">
-+   17     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-+   18     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
-+   19     <style>
-+   20         :root {
-+   21             --red: #E31837;
-+   22             --red-dark: #B81430;
-+   23             --black: #0D0D0D;
-+   24             --black-light: #1A1A1A;
-+   25             --white: #FFFFFF;
-+   26             --cream: #F5F2EB;
-+   27             --gray: #6B6B6B;
-+   28             --gray-light: #E0E0E0;
-+   29             --font-display: 'Bebas Neue', sans-serif;
-+   30             --font-body: 'Barlow', sans-serif;
-+   31             --shadow: 0 4px 20px rgba(0,0,0,0.15);
-+   32             --shadow-lg: 0 10px 40px rgba(0,0,0,0.25);
-+   33         }
-+   34 
-+   35         .dark {
-+   36             --cream: #121212;
-+   37             --white: #1A1A1A;
-+   38             --black: #FFFFFF;
-+   39             --black-light: #F5F5F5;
-+   40             --gray: #A0A0A0;
-+   41             --gray-light: #2A2A2A;
-+   42         }
-+   43 
-+   44         * {
-+   45             margin: 0;
-+   46             padding: 0;
-+   47             box-sizing: border-box;
-+   48         }
-+   49 
-+   50         html {
-+   51             scroll-behavior: smooth;
-+   52         }
-+   53 
-+   54         body {
-+   55             font-family: var(--font-body);
-+   56             background-color: var(--cream);
-+   57             color: var(--black);
-+   58             line-height: 1.6;
-+   59             overflow-x: hidden;
-+   60         }
-+   61 
-+   62         /* Header */
-+   63         header {
-+   64             position: fixed;
-+   65             top: 0;
-+   66             left: 0;
-+   67             right: 0;
-+   68             z-index: 1000;
-+   69             background: var(--black);
-+   70             padding: 0.75rem 1.5rem;
-+   71             transition: all 0.3s ease;
-+   72         }
-+   73 
-+   74         header.scrolled {
-+   75             box-shadow: var(--shadow);
-+   76         }
-+   77 
-+   78         .header-container {
-+   79             max-width: 1280px;
-+   80             margin: 0 auto;
-+   81             display: flex;
-+   82             justify-content: space-between;
-+   83             align-items: center;
-+   84         }
-+   85 
-+   86         .logo {
-+   87             display: flex;
-+   88             align-items: center;
-+   89             gap: 0.5rem;
-+   90             text-decoration: none;
-+   91         }
-+   92 
-+   93         .logo-icon {
-+   94             width: 45px;
-+   95             height: 45px;
-+   96         }
-+   97 
-+   98         .logo-text {
-+   99             font-family: var(--font-display);
-+  100             font-size: 1.5rem;
-+  101             color: var(--white);
-+  102             letter-spacing: 2px;
-+  103             line-height: 1.1;
-+  104         }
-+  105 
-+  106         .logo-text span {
-+  107             color: var(--red);
-+  108         }
-+  109 
-+  110         nav {
-+  111             display: none;
-+  112         }
-+  113 
-+  114         nav.active {
-+  115             display: flex;
-+  116             flex-direction: column;
-+  117             position: absolute;
-+  118             top: 100%;
-+  119             left: 0;
-+  120             right: 0;
-+  121             background: var(--black);
-+  122             padding: 1rem;
-+  123             gap: 0;
-+  124             border-top: 1px solid rgba(255,255,255,0.1);
-+  125         }
-+  126 
-+  127         nav a {
-+  128             color: var(--white);
-+  129             text-decoration: none;
-+  130             font-weight: 500;
-+  131             font-size: 0.95rem;
-+  132             text-transform: uppercase;
-+  133             letter-spacing: 1px;
-+  134             padding: 0.75rem 1rem;
-+  135             transition: color 0.3s ease;
-+  136         }
-+  137 
-+  138         nav a:hover {
-+  139             color: var(--red);
-+  140         }
-+  141 
-+  142         .menu-toggle {
-+  143             display: flex;
-+  144             flex-direction: column;
-+  145             gap: 5px;
-+  146             background: none;
-+  147             border: none;
-+  148             cursor: pointer;
-+  149             padding: 5px;
-+  150         }
-+  151 
-+  152         .menu-toggle span {
-+  153             width: 28px;
-+  154             height: 3px;
-+  155             background: var(--white);
-+  156             border-radius: 2px;
-+  157             transition: all 0.3s ease;
-+  158         }
-+  159 
-+  160         .menu-toggle.active span:nth-child(1) {
-+  161             transform: rotate(45deg) translate(5px, 6px);
-+  162         }
-+  163 
-+  164         .menu-toggle.active span:nth-child(2) {
-+  165             opacity: 0;
-+  166         }
-+  167 
-+  168         .menu-toggle.active span:nth-child(3) {
-+  169             transform: rotate(-45deg) translate(5px, -6px);
-+  170         }
-+  171 
-+  172         /* Hero Section */
-+  173         .hero {
-+  174             min-height: 100vh;
-+  175             display: flex;
-+  176             align-items: center;
-+  177             justify-content: center;
-+  178             position: relative;
-+  179             background: linear-gradient(135deg, var(--black) 0%, var(--black-light) 100%);
-+  180             padding: 6rem 1.5rem 4rem;
-+  181             overflow: hidden;
-+  182         }
-+  183 
-+  184         .hero::before {
-+  185             content: '';
-+  186             position: absolute;
-+  187             top: 0;
-+  188             left: 0;
-+  189             right: 0;
-+  190             bottom: 0;
-+  191             background: 
-+  192                 repeating-linear-gradient(
-+  193                     0deg,
-+  194                     transparent,
-+  195                     transparent 40px,
-+  196                     rgba(227, 24, 55, 0.03) 40px,
-+  197                     rgba(227, 24, 55, 0.03) 80px
-+  198                 );
-+  199             pointer-events: none;
-+  200         }
-+  201 
-+  202         .hero-content {
-+  203             max-width: 1280px;
-+  204             width: 100%;
-+  205             display: grid;
-+  206             grid-template-columns: 1fr;
-+  207             gap: 2rem;
-+  208             align-items: center;
-+  209             position: relative;
-+  210             z-index: 1;
-+  211         }
-+  212 
-+  213         .hero-text {
-+  214             text-align: center;
-+  215         }
-+  216 
-+  217         .hero-badge {
-+  218             display: inline-block;
-+  219             background: var(--red);
-+  220             color: var(--white);
-+  221             padding: 0.4rem 1rem;
-+  222             font-size: 0.8rem;
-+  223             font-weight: 600;
-+  224             text-transform: uppercase;
-+  225             letter-spacing: 2px;
-+  226             margin-bottom: 1.5rem;
-+  227             transform: rotate(-2deg);
-+  228         }
-+  229 
-+  230         .hero h1 {
-+  231             font-family: var(--font-display);
-+  232             font-size: clamp(3rem, 12vw, 6rem);
-+  233             color: var(--white);
-+  234             line-height: 0.95;
-+  235             letter-spacing: 3px;
-+  236             margin-bottom: 1.5rem;
-+  237         }
-+  238 
-+  239         .hero h1 span {
-+  240             color: var(--red);
-+  241             display: block;
-+  242         }
-+  243 
-+  244         .hero-subtitle {
-+  245             font-size: 1.1rem;
-+  246             color: var(--gray);
-+  247             max-width: 500px;
-+  248             margin: 0 auto 2rem;
-+  249         }
-+  250 
-+  251         .hero-buttons {
-+  252             display: flex;
-+  253             flex-direction: column;
-+  254             gap: 1rem;
-+  255             align-items: center;
-+  256         }
-+  257 
-+  258         .btn {
-+  259             display: inline-flex;
-+  260             align-items: center;
-+  261             justify-content: center;
-+  262             gap: 0.5rem;
-+  263             padding: 1rem 2rem;
-+  264             font-family: var(--font-display);
-+  265             font-size: 1.25rem;
-+  266             letter-spacing: 2px;
-+  267             text-decoration: none;
-+  268             text-transform: uppercase;
-+  269             border: none;
-+  270             cursor: pointer;
-+  271             transition: all 0.3s ease;
-+  272         }
-+  273 
-+  274         .btn-primary {
-+  275             background: var(--red);
-+  276             color: var(--white);
-+  277         }
-+  278 
-+  279         .btn-primary:hover {
-+  280             background: var(--red-dark);
-+  281             transform: translateY(-2px);
-+  282             box-shadow: 0 5px 20px rgba(227, 24, 55, 0.4);
-+  283         }
-+  284 
-+  285         .btn-secondary {
-+  286             background: transparent;
-+  287             color: var(--white);
-+  288             border: 2px solid var(--white);
-+  289         }
-+  290 
-+  291         .btn-secondary:hover {
-+  292             background: var(--white);
-+  293             color: var(--black);
-+  294         }
-+  295 
-+  296         .hero-pizza {
-+  297             display: flex;
-+  298             justify-content: center;
-+  299             align-items: center;
-+  300         }
-+  301 
-+  302         .pizza-illustration {
-+  303             width: 280px;
-+  304             height: 280px;
-+  305             position: relative;
-+  306             animation: float 4s ease-in-out infinite;
-+  307         }
-+  308 
-+  309         @keyframes float {
-+  310             0%, 100% { transform: translateY(0) rotate(0deg); }
-+  311             50% { transform: translateY(-15px) rotate(3deg); }
-+  312         }
-+  313 
-+  314         .pizza-circle {
-+  315             width: 100%;
-+  316             height: 100%;
-+  317             border-radius: 50%;
-+  318             background: 
-+  319                 radial-gradient(circle at 30% 30%, #FFD93D 0%, #F4B942 30%, #E5A83B 60%, #D4963A 100%);
-+  320             box-shadow: 
-+  321                 0 20px 60px rgba(0,0,0,0.5),
-+  322                 inset 0 -10px 30px rgba(0,0,0,0.2);
-+  323             position: relative;
-+  324             overflow: hidden;
-+  325         }
-+  326 
-+  327         .pizza-circle::before {
-+  328             content: '';
-+  329             position: absolute;
-+  330             top: 15%;
-+  331             left: 15%;
-+  332             right: 15%;
-+  333             bottom: 15%;
-+  334             border-radius: 50%;
-+  335             background: 
-+  336                 radial-gradient(circle at 40% 40%, #E31837 0%, #C41230 50%, #A61028 100%);
-+  337         }
-+  338 
-+  339         .pepperoni {
-+  340             position: absolute;
-+  341             width: 35px;
-+  342             height: 35px;
-+  343             border-radius: 50%;
-+  344             background: 
-+  345                 radial-gradient(circle at 40% 40%, #8B2500 0%, #6B1D00 60%, #4A1500 100%);
-+  346             box-shadow: inset 0 2px 4px rgba(255,255,255,0.2);
-+  347         }
-+  348 
-+  349         .pepperoni:nth-child(1) { top: 25%; left: 30%; }
-+  350         .pepperoni:nth-child(2) { top: 35%; right: 25%; }
-+  351         .pepperoni:nth-child(3) { bottom: 30%; left: 25%; }
-+  352         .pepperoni:nth-child(4) { bottom: 25%; right: 30%; }
-+  353         .pepperoni:nth-child(5) { top: 50%; left: 50%; transform: translate(-50%, -50%); }
-+  354         .pepperoni:nth-child(6) { top: 20%; right: 35%; width: 28px; height: 28px; }
-+  355         .pepperoni:nth-child(7) { bottom: 40%; left: 35%; width: 30px; height: 30px; }
-+  356 
-+  357         /* About Section */
-+  358         .about {
-+  359             padding: 5rem 1.5rem;
-+  360             background: var(--cream);
-+  361         }
-+  362 
-+  363         .container {
-+  364             max-width: 1100px;
-+  365             margin: 0 auto;
-+  366         }
-+  367 
-+  368         .section-header {
-+  369             text-align: center;
-+  370             margin-bottom: 3rem;
-+  371         }
-+  372 
-+  373         .section-tag {
-+  374             font-size: 0.85rem;
-+  375             color: var(--red);
-+  376             font-weight: 600;
-+  377             text-transform: uppercase;
-+  378             letter-spacing: 3px;
-+  379             margin-bottom: 0.75rem;
-+  380         }
-+  381 
-+  382         .section-title {
-+  383             font-family: var(--font-display);
-+  384             font-size: clamp(2.5rem, 8vw, 4rem);
-+  385             color: var(--black);
-+  386             letter-spacing: 2px;
-+  387             line-height: 1;
-+  388         }
-+  389 
-+  390         .about-content {
-+  391             display: grid;
-+  392             grid-template-columns: 1fr;
-+  393             gap: 2.5rem;
-+  394             align-items: center;
-+  395         }
-+  396 
-+  397         .about-image {
-+  398             position: relative;
-+  399             display: flex;
-+  400             justify-content: center;
-+  401         }
-+  402 
-+  403         .about-img-wrapper {
-+  404             width: 100%;
-+  405             max-width: 400px;
-+  406             aspect-ratio: 4/3;
-+  407             background: var(--black);
-+  408             position: relative;
-+  409             overflow: hidden;
-+  410         }
-+  411 
-+  412         .about-img-wrapper::before {
-+  413             content: '';
-+  414             position: absolute;
-+  415             inset: 0;
-+  416             background: 
-+  417                 linear-gradient(45deg, var(--red) 25%, transparent 25%),
-+  418                 linear-gradient(-45deg, var(--red) 25%, transparent 25%),
-+  419                 linear-gradient(45deg, transparent 75%, var(--red) 75%),
-+  420                 linear-gradient(-45deg, transparent 75%, var(--red) 75%);
-+  421             background-size: 30px 30px;
-+  422             opacity: 0.1;
-+  423         }
-+  424 
-+  425         .about-img-wrapper svg {
-+  426             width: 100%;
-+  427             height: 100%;
-+  428         }
-+  429 
-+  430         .about-text h3 {
-+  431             font-family: var(--font-display);
-+  432             font-size: 2rem;
-+  433             margin-bottom: 1rem;
-+  434             letter-spacing: 1px;
-+  435         }
-+  436 
-+  437         .about-text p {
-+  438             color: var(--gray);
-+  439             margin-bottom: 1rem;
-+  440             font-size: 1.05rem;
-+  441         }
-+  442 
-+  443         .about-text p:last-of-type {
-+  444             margin-bottom: 0;
-+  445         }
-+  446 
-+  447         /* Menu Section */
-+  448         .menu {
-+  449             padding: 5rem 1.5rem;
-+  450             background: var(--white);
-+  451         }
-+  452 
-+  453         .menu-grid {
-+  454             display: grid;
-+  455             grid-template-columns: 1fr;
-+  456             gap: 1.5rem;
-+  457         }
-+  458 
-+  459         .menu-card {
-+  460             background: var(--cream);
-+  461             border: 1px solid var(--gray-light);
-+  462             padding: 1.5rem;
-+  463             display: flex;
-+  464             flex-direction: column;
-+  465             gap: 1rem;
-+  466             transition: all 0.3s ease;
-+  467             position: relative;
-+  468             overflow: hidden;
-+  469         }
-+  470 
-+  471         .menu-card::before {
-+  472             content: '';
-+  473             position: absolute;
-+  474             top: 0;
-+  475             left: 0;
-+  476             width: 4px;
-+  477             height: 100%;
-+  478             background: var(--red);
-+  479             transform: scaleY(0);
-+  480             transition: transform 0.3s ease;
-+  481         }
-+  482 
-+  483         .menu-card:hover {
-+  484             transform: translateY(-5px);
-+  485             box-shadow: var(--shadow);
-+  486         }
-+  487 
-+  488         .menu-card:hover::before {
-+  489             transform: scaleY(1);
-+  490         }
-+  491 
-+  492         .menu-card-header {
-+  493             display: flex;
-+  494             justify-content: space-between;
-+  495             align-items: flex-start;
-+  496             gap: 1rem;
-+  497         }
-+  498 
-+  499         .menu-card h3 {
-+  500             font-family: var(--font-display);
-+  501             font-size: 1.5rem;
-+  502             letter-spacing: 1px;
-+  503             color: var(--black);
-+  504         }
-+  505 
-+  506         .menu-price {
-+  507             font-family: var(--font-display);
-+  508             font-size: 1.5rem;
-+  509             color: var(--red);
-+  510             white-space: nowrap;
-+  511         }
-+  512 
-+  513         .menu-card p {
-+  514             color: var(--gray);
-+  515             font-size: 0.95rem;
-+  516             flex-grow: 1;
-+  517         }
-+  518 
-+  519         .menu-tag {
-+  520             display: inline-block;
-+  521             background: var(--black);
-+  522             color: var(--white);
-+  523             padding: 0.25rem 0.75rem;
-+  524             font-size: 0.7rem;
-+  525             font-weight: 600;
-+  526             text-transform: uppercase;
-+  527             letter-spacing: 1px;
-+  528             align-self: flex-start;
-+  529         }
-+  530 
-+  531         .menu-tag.popular {
-+  532             background: var(--red);
-+  533         }
-+  534 
-+  535         /* Highlights Section */
-+  536         .highlights {
-+  537             padding: 5rem 1.5rem;
-+  538             background: var(--black);
-+  539             color: var(--white);
-+  540         }
-+  541 
-+  542         .highlights .section-title {
-+  543             color: var(--white);
-+  544         }
-+  545 
-+  546         .highlights-grid {
-+  547             display: grid;
-+  548             grid-template-columns: 1fr;
-+  549             gap: 2rem;
-+  550    }
-+  551 
-+  552         .highlight-card {
-+  553             text-align: center;
-+  554             padding: 2rem 1.5rem;
-+  555             border: 1px solid rgba(255,255,255,0.1);
-+  556             transition: all 0.3s ease;
-+  557         }
-+  558 
-+  559         .highlight-card:hover {
-+  560             border-color: var(--red);
-+  561             background: rgba(227, 24, 55, 0.05);
-+  562         }
-+  563 
-+  564         .highlight-icon {
-+  565             width: 70px;
-+  566             height: 70px;
-+  567             margin: 0 auto 1.5rem;
-+  568             color: var(--red);
-+  569         }
-+  570 
-+  571         .highlight-card h3 {
-+  572             font-family: var(--font-display);
-+  573             font-size: 1.5rem;
-+  574             margin-bottom: 0.75rem;
-+  575             letter-spacing: 1px;
-+  576         }
-+  577 
-+  578         .highlight-card p {
-+  579             color: var(--gray);
-+  580             font-size: 0.95rem;
-+  581         }
-+  582 
-+  583         /* CTA Section */
-+  584         .cta {
-+  585             padding: 5rem 1.5rem;
-+  586             background: var(--red);
-+  587             text-align: center;
-+  588             position: relative;
-+  589             overflow: hidden;
-+  590         }
-+  591 
-+  592         .cta::before {
-+  593             content: '';
-+  594             position: absolute;
-+  595             top: -50%;
-+  596             left: -50%;
-+  597             width: 200%;
-+  598             height: 200%;
-+  599             background: repeating-linear-gradient(
-+  600                 45deg,
-+  601                 transparent,
-+  602                 transparent 20px,
-+  603                 rgba(0,0,0,0.05) 20px,
-+  604                 rgba(0,0,0,0.05) 40px
-+  605             );
-+  606             animation: stripes 20s linear infinite;
-+  607         }
-+  608 
-+  609         @keyframes stripes {
-+  610             0% { transform: translate(0, 0); }
-+  611             100% { transform: translate(40px, 40px); }
-+  612         }
-+  613 
-+  614         .cta-content {
-+  615             position: relative;
-+  616             z-index: 1;
-+  617         }
-+  618 
-+  619         .cta h2 {
-+  620             font-family: var(--font-display);
-+  621             font-size: clamp(2.5rem, 8vw, 4rem);
-+  622             color: var(--white);
-+  623             letter-spacing: 2px;
-+  624             margin-bottom: 1rem;
-+  625             line-height: 1;
-+  626         }
-+  627 
-+  628         .cta p {
-+  629             color: rgba(255,255,255,0.9);
-+  630             font-size: 1.1rem;
-+  631             margin-bottom: 2rem;
-+  632             max-width: 500px;
-+  633             margin-left: auto;
-+  634             margin-right: auto;
-+  635         }
-+  636 
-+  637         .btn-whatsapp {
-+  638             background: #25D366;
-+  639             color: var(--white);
-+  640             font-size: 1.25rem;
-+  641             padding: 1.25rem 2.5rem;
-+  642         }
-+  643 
-+  644         .btn-whatsapp:hover {
-+  645             background: #1EBE5A;
-+  646             transform: translateY(-2px);
-+  647             box-shadow: 0 5px 25px rgba(37, 211, 102, 0.4);
-+  648         }
-+  649 
-+  650         .btn-whatsapp svg {
-+  651             width: 24px;
-+  652             height: 24px;
-+  653         }
-+  654 
-+  655         /* Reviews Section */
-+  656         .reviews {
-+  657             padding: 5rem 1.5rem;
-+  658             background: var(--cream);
-+  659         }
-+  660 
-+  661         .reviews-grid {
-+  662             display: grid;
-+  663             grid-template-columns: 1fr;
-+  664             gap: 1.5rem;
-+  665         }
-+  666 
-+  667         .review-card {
-+  668             background: var(--white);
-+  669             padding: 2rem;
-+  670             border: 1px solid var(--gray-light);
-+  671             position: relative;
-+  672         }
-+  673 
-+  674         .review-card::before {
-+  675             content: '"';
-+  676             font-family: var(--font-display);
-+  677             font-size: 5rem;
-+  678             color: var(--red);
-+  679             opacity: 0.15;
-+  680             position: absolute;
-+  681             top: -10px;
-+  682             left: 15px;
-+  683             line-height: 1;
-+  684         }
-+  685 
-+  686         .review-stars {
-+  687             display: flex;
-+  688             gap: 4px;
-+  689             margin-bottom: 1rem;
-+  690         }
-+  691 
-+  692         .review-stars svg {
-+  693             width: 20px;
-+  694             height: 20px;
-+  695             fill: #FFB800;
-+  696         }
-+  697 
-+  698         .review-card p {
-+  699             color: var(--gray);
-+  700             font-style: italic;
-+  701             margin-bottom: 1.5rem;
-+  702             position: relative;
-+  703             z-index: 1;
-+  704         }
-+  705 
-+  706         .review-author {
-+  707             display: flex;
-+  708             align-items: center;
-+  709             gap: 1rem;
-+  710         }
-+  711 
-+  712         .review-avatar {
-+  713             width: 50px;
-+  714             height: 50px;
-+  715             border-radius: 50%;
-+  716             background: var(--red);
-+  717             display: flex;
-+  718             align-items: center;
-+  719             justify-content: center;
-+  720             color: var(--white);
-+  721             font-family: var(--font-display);
-+  722             font-size: 1.25rem;
-+  723         }
-+  724 
-+  725         .review-info h4 {
-+  726             font-weight: 600;
-+  727             font-size: 1rem;
-+  728             color: var(--black);
-+  729         }
-+  730 
-+  731         .review-info span {
-+  732             font-size: 0.85rem;
-+  733             color: var(--gray);
-+  734         }
-+  735 
-+  736         /* Footer */
-+  737         footer {
-+  738             background: var(--black);
-+  739             color: var(--white);
-+  740             padding: 4rem 1.5rem 2rem;
-+  741         }
-+  742 
-+  743         .footer-content {
-+  744             max-width: 1100px;
-+  745             margin: 0 auto;
-+  746             display: grid;
-+  747             grid-template-columns: 1fr;
-+  748             gap: 2.5rem;
-+  749         }
-+  750 
-+  751         .footer-brand {
-+  752             text-align: center;
-+  753         }
-+  754 
-+  755         .footer-brand .logo-text {
-+  756             font-size: 2rem;
-+  757             margin-bottom: 1rem;
-+  758         }
-+  759 
-+  760         .footer-brand p {
-+  761             color: var(--gray);
-+  762             max-width: 300px;
-+  763             margin: 0 auto;
-+  764         }
-+  765 
-+  766         .footer-info {
-+  767             text-align: center;
-+  768         }
-+  769 
-+  770         .footer-info h4 {
-+  771             font-family: var(--font-display);
-+  772             font-size: 1.25rem;
-+  773             letter-spacing: 1px;
-+  774             margin-bottom: 1rem;
-+  775             color: var(--red);
-+  776         }
-+  777 
-+  778         .footer-info p {
-+  779             color: var(--gray);
-+  780             margin-bottom: 0.5rem;
-+  781             font-size: 0.95rem;
-+  782         }
-+  783 
-+  784         .footer-info a {
-+  785             color: var(--gray);
-+  786             text-decoration: none;
-+  787             transition: color 0.3s ease;
-+  788         }
-+  789 
-+  790         .footer-info a:hover {
-+  791             color: var(--red);
-+  792         }
-+  793 
-+  794         .social-links {
-+  795             display: flex;
-+  796             justify-content: center;
-+  797             gap: 1rem;
-+  798             margin-top: 1rem;
-+  799         }
-+  800 
-+  801         .social-links a {
-+  802             width: 44px;
-+  803             height: 44px;
-+  804             border: 1px solid rgba(255,255,255,0.2);
-+  805             display: flex;
-+  806             align-items: center;
-+  807             justify-content: center;
-+  808             transition: all 0.3s ease;
-+  809         }
-+  810 
-+  811         .social-links a:hover {
-+  812             background: var(--red);
-+  813             border-color: var(--red);
-+  814         }
-+  815 
-+  816         .social-links svg {
-+  817             width: 20px;
-+  818             height: 20px;
-+  819             fill: var(--white);
-+  820         }
-+  821 
-+  822         .footer-bottom {
-+  823             max-width: 1100px;
-+  824             margin: 3rem auto 0;
-+  825             padding-top: 2rem;
-+  826             border-top: 1px solid rgba(255,255,255,0.1);
-+  827             text-align: center;
-+  828         }
-+  829 
-+  830         .footer-bottom p {
-+  831             color: var(--gray);
-+  832             font-size: 0.85rem;
-+  833         }
-+  834 
-+  835         /* Desktop Styles */
-+  836         @media (min-width: 768px) {
-+  837             header {
-+  838                 padding: 1rem 2rem;
-+  839             }
-+  840 
-+  841             nav {
-+  842                 display: flex;
-+  843                 gap: 2rem;
-+  844             }
-+  845 
-+  846             .menu-toggle {
-+  847                 display: none;
-+  848             }
-+  849 
-+  850             .hero {
-+  851                 padding: 8rem 2rem;
-+  852             }
-+  853 
-+  854             .hero-content {
-+  855                 grid-template-columns: 1fr 1fr;
-+  856                 gap: 4rem;
-+  857             }
-+  858 
-+  859             .hero-text {
-+  860                 text-align: left;
-+  861             }
-+  862 
-+  863             .hero-subtitle {
-+  864                 margin: 0 0 2rem;
-+  865             }
-+  866 
-+  867             .hero-buttons {
-+  868                 flex-direction: row;
-+  869                 justify-content: flex-start;
-+  870             }
-+  871 
-+  872             .pizza-illustration {
-+  873                 width: 400px;
-+  874                 height: 400px;
-+  875             }
-+  876 
-+  877             .about-content {
-+  878                 grid-template-columns: 1fr 1fr;
-+  879                 gap: 4rem;
-+  880             }
-+  881 
-+  882             .menu-grid {
-+  883                 grid-template-columns: repeat(2, 1fr);
-+  884             }
-+  885 
-+  886             .highlights-grid {
-+  887                 grid-template-columns: repeat(3, 1fr);
-+  888             }
-+  889 
-+  890             .reviews-grid {
-+  891                 grid-template-columns: repeat(2, 1fr);
-+  892             }
-+  893 
-+  894             .footer-content {
-+  895                 grid-template-columns: repeat(3, 1fr);
-+  896                 text-align: left;
-+  897             }
-+  898 
-+  899             .footer-brand,
-+  900             .footer-info {
-+  901                 text-align: left;
-+  902             }
-+  903 
-+  904             .footer-brand p {
-+  905                 margin: 0;
-+  906             }
-+  907 
-+  908             .social-links {
-+  909                 justify-content: flex-start;
-+  910             }
-+  911         }
-+  912 
-+  913         @media (min-width: 1024px) {
-+  914             .menu-grid {
-+  915                 grid-template-columns: repeat(3, 1fr);
-+  916             }
-+  917 
-+  918             .reviews-grid {
-+  919                 grid-template-columns: repeat(3, 1fr);
-+  920             }
-+  921 
-+  922             .pizza-illustration {
-+  923                 width: 450px;
-+  924                 height: 450px;
-+  925             }
-+  926         }
-+  927     </style>
-+  928 </head>
-+  929 <body>
-+  930     <!-- Header -->
-+  931     <header id="header">
-+  932         <div class="header-container">
-+  933             <a href="#" class="logo">
-+  934                 <svg class="logo-icon" viewBox="0 0 50 50" fill="none">
-+  935                     <circle cx="25" cy="25" r="23" fill="#E31837"/>
-+  936                     <circle cx="25" cy="25" r="18" fill="#F4B942"/>
-+  937                     <circle cx="18" cy="20" r="4" fill="#6B1D00"/>
-+  938                     <circle cx="32" cy="22" r="4" fill="#6B1D00"/>
-+  939                     <circle cx="25" cy="32" r="4" fill="#6B1D00"/>
-+  940                 </svg>
-+  941                 <div class="logo-text">AMERICAN<br><span>PIZZA STYLE</span></div>
-+  942             </a>
-+  943             <button class="menu-toggle" id="menuToggle" aria-label="Menu">
-+  944                 <span></span>
-+  945                 <span></span>
-+  946                 <span></span>
-+  947             </button>
-+  948             <nav id="nav">
-+  949                 <a href="#sobre">Sobre</a>
-+  950                 <a href="#cardapio">Cardápio</a>
-+  951                 <a href="#diferenciais">Diferenciais</a>
-+  952                 <a href="#avaliacoes">Avaliações</a>
-+  953                 <a href="#contato">Contato</a>
-+  954             </nav>
-+  955         </div>
-+  956     </header>
-+  957 
-+  958     <!-- Hero Section -->
-+  959     <section class="hero">
-+  960         <div class="hero-content">
-+  961             <div class="hero-text">
-+  962                 <span class="hero-badge">🍕 Desde 2010</span>
-+  963                 <h1>SABOR QUE<span>ATRAVESSA</span>FRONTEIRAS</h1>
-+  964                 <p class="hero-subtitle">Pizza artesanal no autêntico estilo americano. Massa crocante por fora, macia por dentro, e recheio generoso de dar água na boca.</p>
-+  965                 <div class="hero-buttons">
-+  966                     <a href="https://wa.me/5511999999999?text=Olá! Gostaria de fazer um pedido" class="btn btn-primary">
-+  967                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-+  968                             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-+  969                         </svg>
-+  970                         Pedir Agora
-+  971                     </a>
-+  972                     <a href="#cardapio" class="btn btn-secondary">Ver Cardápio</a>
-+  973                 </div>
-+  974             </div>
-+  975             <div class="hero-pizza">
-+  976                 <div class="pizza-illustration">
-+  977                     <div class="pizza-circle">
-+  978                         <div class="pepperoni"></div>
-+  979                         <div class="pepperoni"></div>
-+  980                         <div class="pepperoni"></div>
-+  981                         <div class="pepperoni"></div>
-+  982                         <div class="pepperoni"></div>
-+  983                         <div class="pepperoni"></div>
-+  984                         <div class="pepperoni"></div>
-+  985                     </div>
-+  986                 </div>
-+  987             </div>
-+  988         </div>
-+  989     </section>
-+  990 
-+  991     <!-- About Section -->
-+  992     <section class="about" id="sobre">
-+  993         <div class="container">
-+  994             <div class="section-header">
-+  995                 <p class="section-tag">Nossa História</p>
-+  996                 <h2 class="section-title">SOBRE NÓS</h2>
-+  997             </div>
-+  998             <div class="about-content">
-+  999                 <div class="about-image">
-+ 1000                     <div class="about-img-wrapper">
-+ 1001                         <svg viewBox="0 0 400 300" fill="none">
-+ 1002                             <rect width="400" height="300" fill="#1A1A1A"/>
-+ 1003                             <circle cx="200" cy="150" r="100" fill="#F4B942"/>
-+ 1004                             <circle cx="200" cy="150" r="80" fill="#E31837"/>
-+ 1005                             <circle cx="170" cy="130" r="15" fill="#6B1D00"/>
-+ 1006                             <circle cx="230" cy="140" r="15" fill="#6B1D00"/>
-+ 1007                             <circle cx="190" cy="175" r="15" fill="#6B1D00"/>
-+ 1008                             <circle cx="215" cy="115" r="12" fill="#6B1D00"/>
-+ 1009                             <rect x="50" y="250" width="300" height="30" rx="5" fill="#F4B942"/>
-+ 1010                             <text x="200" y="272" text-anchor="middle" fill="#1A1A1A" font-family="Bebas Neue" font-size="20">AMERICAN STYLE SINCE 2010</text>
-+ 1011                         </svg>
-+ 1012                     </div>
-+ 1013                 </div>
-+ 1014                 <div class="about-text">
-+ 1015                     <h3>A VERDADEIRA PIZZA AMERICANA</h3>
-+ 1016                     <p>Nascemos da paixão por trazer ao Brasil o autêntico sabor das pizzarias de Nova York e Chicago. Cada fatia que servimos carrega a essência das receitas tradicionais americanas, adaptadas com carinho ao paladar brasileiro.</p>
-+ 1017                     <p>Nossa massa é fermentada por 72 horas, resultando em uma textura única: crocante nas bordas e macia no centro. Usamos apenas ingredientes selecionados e molhos feitos artesanalmente na casa.</p>
-+ 1018                     <p>Desde 2010, transformamos momentos em memórias deliciosas. Cada pizza que sai do nosso forno é uma celebração do sabor, da tradição e do amor pela boa gastronomia.</p>
-+ 1019                 </div>
-+ 1020             </div>
-+ 1021         </div>
-+ 1022     </section>
-+ 1023 
-+ 1024     <!-- Menu Section -->
-+ 1025     <section class="menu" id="cardapio">
-+ 1026         <div class="container">
-+ 1027             <div class="section-header">
-+ 1028                 <p class="section-tag">O Melhor da Casa</p>
-+ 1029                 <h2 class="section-title">NOSSO CARDÁPIO</h2>
-+ 1030             </div>
-+ 1031             <div class="menu-grid">
-+ 1032                 <div class="menu-card">
-+ 1033                     <span class="menu-tag popular">Mais Pedida</span>
-+ 1034                     <div class="menu-card-header">
-+ 1035                         <h3>PEPPERONI CLASSIC</h3>
-+ 1036                         <span class="menu-price">R$ 59,90</span>
-+ 1037                     </div>
-+ 1038                     <p>Molho de tomate artesanal, mozzarella de búfala, pepperoni importado e orégano fresco. A original americana.</p>
-+ 1039                 </div>
-+ 1040                 <div class="menu-card">
-+ 1041                     <span class="menu-tag">Novidade</span>
-+ 1042                     <div class="menu-card-header">
-+ 1043                         <h3>CHICAGO DEEP DISH</h3>
-+ 1044                         <span class="menu-price">R$ 69,90</span>
-+ 1045                     </div>
-+ 1046                     <p>Massa alta e crocante, recheada com camadas de queijo, linguiça italiana e molho de tomate San Marzano.</p>
-+ 1047                 </div>
-+ 1048                 <div class="menu-card">
-+ 1049                     <div class="menu-card-header">
-+ 1050                         <h3>NEW YORK STYLE</h3>
-+ 1051                         <span class="menu-price">R$ 54,90</span>
-+ 1052                     </div>
-+ 1053                     <p>Massa fina e flexível, molho de tomate, blend de queijos especiais e manjericão fresco. Clássica e irresistível.</p>
-+ 1054                 </div>
-+ 1055                 <div class="menu-card">
-+ 1056                     <div class="menu-card-header">
-+ 1057                         <h3>BBQ BACON</h3>
-+ 1058                         <span class="menu-price">R$ 64,90</span>
-+ 1059                     </div>
-+ 1060                     <p>Molho barbecue defumado, frango grelhado, bacon crocante, cebola roxa caramelizada e cheddar.</p>
-+ 1061                 </div>
-+ 1062                 <div class="menu-card">
-+ 1063                     <span class="menu-tag popular">Favorita</span>
-+ 1064                     <div class="menu-card-header">
-+ 1065                         <h3>MEAT LOVERS</h3>
-+ 1066                         <span class="menu-price">R$ 74,90</span>
-+ 1067                     </div>
-+ 1068                     <p>Para amantes de carne: pepperoni, bacon, linguiça, carne moída e blend especial de queijos.</p>
-+ 1069                 </div>
-+ 1070                 <div class="menu-card">
-+ 1071                     <div class="menu-card-header">
-+ 1072                         <h3>VEGETARIANA SUPREME</h3>
-+ 1073                         <span class="menu-price">R$ 52,90</span>
-+ 1074                     </div>
-+ 1075                     <p>Pimentões coloridos, cogumelos, tomate, cebola, azeitonas pretas e mix de queijos premium.</p>
-+ 1076                 </div>
-+ 1077             </div>
-+ 1078         </div>
-+ 1079     </section>
-+ 1080 
-+ 1081     <!-- Highlights Section -->
-+ 1082     <section class="highlights" id="diferenciais">
-+ 1083         <div class="container">
-+ 1084             <div class="section-header">
-+ 1085                 <p class="section-tag">Por Que Somos Únicos</p>
-+ 1086                 <h2 class="section-title">NOSSOS DIFERENCIAIS</h2>
-+ 1087             </div>
-+ 1088             <div class="highlights-grid">
-+ 1089                 <div class="highlight-card">
-+ 1090                     <svg class="highlight-icon" viewBox="0 0 64 64" fill="none">
-+ 1091                         <path d="M32 8C18.745 8 8 18.745 8 32s10.745 24 24 24 24-10.745 24-24S45.255 8 32 8z" stroke="currentColor" stroke-width="3"/>
-+ 1092                         <path d="M32 16c-8.837 0-16 7.163-16 16s7.163 16 16 16 16-7.163 16-16-7.163-16-16-16z" fill="currentColor" opacity="0.2"/>
-+ 1093                         <path d="M26 28c2.5-3 5.5-3 6 0s4 3 6 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-+ 1094                         <circle cx="32" cy="38" r="4" fill="currentColor"/>
-+ 1095                     </svg>
-+ 1096                     <h3>MASSA ARTESANAL</h3>
-+ 1097                     <p>Fermentação natural por 72 horas para uma textura perfeita: crocante por fora e macia por dentro.</p>
-+ 1098                 </div>
-+ 1099                 <div class="highlight-card">
-+ 1100                     <svg class="highlight-icon" viewBox="0 0 64 64" fill="none">
-+ 1101                         <rect x="12" y="24" width="40" height="28" rx="4" stroke="currentColor" stroke-width="3"/>
-+ 1102                         <path d="M16 24V16a16 16 0 0132 0v8" stroke="currentColor" stroke-width="3"/>
-+ 1103                         <circle cx="32" cy="38" r="6" stroke="currentColor" stroke-width="2"/>
-+ 1104                         <path d="M32 35v6M29 38h6" stroke="currentColor" stroke-width="2"/>
-+ 1105                     </svg>
-+ 1106                     <h3>INGREDIENTES PREMIUM</h3>
-+ 1107                     <p>Selecionamos ingredientes importados e nacionais de primeira qualidade para cada receita.</p>
-+ 1108                 </div>
-+ 1109                 <div class="highlight-card">
-+ 1110                     <svg class="highlight-icon" viewBox="0 0 64 64" fill="none">
-+ 1111                         <path d="M8 44h48v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-8z" stroke="currentColor" stroke-width="3"/>
-+ 1112                         <path d="M12 44c0-16 8-28 20-28s20 12 20 28" stroke="currentColor" stroke-width="3"/>
-+ 1113                         <path d="M20 36l4 4 8-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-+ 1114                         <path d="M24 20c2 0 4 2 8 2s6-2 8-2" stroke="currentColor" stroke-width="2" opacity="0.5"/>
-+ 1115                     </svg>
-+ 1116                     <h3>FORNO A LENHA</h3>
-+ 1117                     <p>Nosso forno especial atinge 450°C, garantindo o sabor defumado autêntico das pizzarias americanas.</p>
-+ 1118                 </div>
-+ 1119             </div>
-+ 1120         </div>
-+ 1121     </section>
-+ 1122 
-+ 1123     <!-- CTA Section -->
-+ 1124     <section class="cta">
-+ 1125         <div class="cta-content">
-+ 1126             <h2>FOME DE PIZZA?</h2>
-+ 1127             <p>Faça seu pedido agora pelo WhatsApp e receba sua pizza quentinha em até 45 minutos!</p>
-+ 1128             <a href="https://wa.me/5511999999999?text=Olá! Gostaria de fazer um pedido" class="btn btn-whatsapp">
-+ 1129                 <svg viewBox="0 0 24 24" fill="currentColor">
-+ 1130                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-+ 1131                 </svg>
-+ 1132                 Pedir pelo WhatsApp
-+ 1133             </a>
-+ 1134         </div>
-+ 1135     </section>
-+ 1136 
-+ 1137     <!-- Reviews Section -->
-+ 1138     <section class="reviews" id="avaliacoes">
-+ 1139         <div class="container">
-+ 1140             <div class="section-header">
-+ 1141                 <p class="section-tag">O Que Dizem</p>
-+ 1142                 <h2 class="section-title">AVALIAÇÕES</h2>
-+ 1143             </div>
-+ 1144             <div class="reviews-grid">
-+ 1145                 <div class="review-card">
-+ 1146                     <div class="review-stars">
-+ 1147                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1148                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1149                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1150                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1151                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1152                     </div>
-+ 1153                     <p>"Simplesmente a melhor pizza que já comi! A massa é incrível e o pepperoni derrete na boca. Virei cliente fiel!"</p>
-+ 1154                     <div class="review-author">
-+ 1155                         <div class="review-avatar">M</div>
-+ 1156                         <div class="review-info">
-+ 1157                             <h4>Marcelo S.</h4>
-+ 1158                             <span>Cliente desde 2019</span>
-+ 1159                         </div>
-+ 1160                     </div>
-+ 1161                 </div>
-+ 1162                 <div class="review-card">
-+ 1163                     <div class="review-stars">
-+ 1164                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1165                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1166                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1167                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1168                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1169                     </div>
-+ 1170                     <p>"A Chicago Deep Dish é uma experiência única! Nunca tinha provado nada parecido. Parece que estou em Chicago!"</p>
-+ 1171                     <div class="review-author">
-+ 1172                         <div class="review-avatar">A</div>
-+ 1173                         <div class="review-info">
-+ 1174                             <h4>Ana Paula R.</h4>
-+ 1175                             <span>Cliente desde 2021</span>
-+ 1176                         </div>
-+ 1177                     </div>
-+ 1178                 </div>
-+ 1179                 <div class="review-card">
-+ 1180                     <div class="review-stars">
-+ 1181                  <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1182                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1183                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1184                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1185                         <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-+ 1186                     </div>
-+ 1187                     <p>"Delivery super rápido e a pizza chegou quentinha! O atendimento pelo WhatsApp é excelente. Recomendo demais!"</p>
-+ 1188                     <div class="review-author">
-+ 1189                         <div class="review-avatar">R</div>
-+ 1190                         <div class="review-info">
-+ 1191                             <h4>Ricardo L.</h4>
-+ 1192                             <span>Cliente desde 2022</span>
-+ 1193                         </div>
-+ 1194                     </div>
-+ 1195                 </div>
-+ 1196             </div>
-+ 1197         </div>
-+ 1198     </section>
-+ 1199 
-+ 1200     <!-- Footer -->
-+ 1201     <footer id="contato">
-+ 1202         <div class="footer-content">
-+ 1203             <div class="footer-brand">
-+ 1204                 <div class="logo-text">AMERICAN<br><span>PIZZA STYLE</span></div>
-+ 1205                 <p>Trazendo o autêntico sabor das pizzarias americanas para você desde 2010.</p>
-+ 1206             </div>
-+ 1207             <div class="footer-info">
-+ 1208                 <h4>ENDEREÇO</h4>
-+ 1209                 <p>Rua das Pizzas, 1234</p>
-+ 1210                 <p>Jardim América - São Paulo/SP</p>
-+ 1211                 <p>CEP: 01234-567</p>
-+ 1212             </div>
-+ 1213             <div class="footer-info">
-+ 1214                 <h4>HORÁRIO</h4>
-+ 1215                 <p>Terça a Domingo</p>
-+ 1216                 <p>18h às 23h30</p>
-+ 1217                 <p style="margin-top: 1rem;"><a href="tel:+5511999999999">(11) 99999-9999</a></p>
-+ 1218                 <div class="social-links">
-+ 1219                     <a href="https://instagram.com/americanpizzastyle" aria-label="Instagram" target="_blank" rel="noopener">
-+ 1220                         <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-+ 1221                     </a>
-+ 1222                     <a href="https://facebook.com/americanpizzastyle" aria-label="Facebook" target="_blank" rel="noopener">
-+ 1223                         <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-+ 1224                     </a>
-+ 1225                     <a href="https://wa.me/5511999999999" aria-label="WhatsApp" target="_blank" rel="noopener">
-+ 1226                         <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-+ 1227                     </a>
-+ 1228                 </div>
-+ 1229             </div>
-+ 1230         </div>
-+ 1231         <div class="footer-bottom">
-+ 1232             <p>© 2025 American Pizza Style. Todos os direitos reservados. | <a href="https://americanpizzastyle.com.br">americanpizzastyle.com.br</a></p>
-+ 1233         </div>
-+ 1234     </footer>
-+ 1235 
-+ 1236     <script>
-+ 1237         // Dark mode detection
-+ 1238         if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-+ 1239             document.documentElement.classList.add('dark');
-+ 1240         }
-+ 1241         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(event) {
-+ 1242             if (event.matches) {
-+ 1243                 document.documentElement.classList.add('dark');
-+ 1244             } else {
-+ 1245                 document.documentElement.classList.remove('dark');
-+ 1246             }
-+ 1247         });
-+ 1248 
-+ 1249         // Mobile menu toggle
-+ 1250         const menuToggle = document.getElementById('menuToggle');
-+ 1251         const nav = document.getElementById('nav');
-+ 1252 
-+ 1253         menuToggle.addEventListener('click', function() {
-+ 1254             this.classList.toggle('active');
-+ 1255            av.classList.toggle('active');
-+ 1256         });
-+ 1257 
-+ 1258         // Close menu when clicking a link
-+ 1259         nav.querySelectorAll('a').forEach(function(link) {
-+ 1260             link.addEventListener('click', function() {
-+ 1261                 menuToggle.classList.remove('active');
-+ 1262             v.classList.remove('active');
-+ 1263                 n        // Header scroll effect
-+ 1264        der = document.getElementById('header')   window.addEventListener('scroll', function() {
-+ 1265             if (window.scrollY > 50) {
-+ 1266          der.classList.add('scrolled');
-+ 1267             } else {
-+ 1268           ader.classList.remove('scrolled');
-+ 1269             }
-+ 1270    );
-+ 1271 
-+ 1272       mooth scroll for anchor links
-+ 1273         document.querySelectorAll('a[href^="#"]').foron(anchor) {
-+ 1274       ddtener('ccti         ntDefault();
-+ 1275             rget = document.querySelector(this.ttribute('href'));
-+ 1276                 if (target) {
-+ 1277          const headerOffset = 8            elementPosition = target.getBodinntRect().t              offsetPementPosdow.page- headn          dow.scrollTo({
-+ 1278          top: offition,
-+ 1279             ior: 'sm                 }          }     });
-+ 1280   
-+ 1281 
-+ 1282  ntersecter for ions
-+ 1283         const obseions {
-+ 1284        hres
-+ 1285           argin: '0p -50px 0px    };
-+ 1286 
-+ 1287  conserveersectiunrie        enorEach(functioentry) {
-+ 1288         if (ery.isInting) {
-+ 1289                  entry.target.style.oy = '1';
-+ 1290               ent.tart.style.tra= 0)';
-+ 1291                         });
-+ 1292         }, observerOpt        // Animantsscroll
-+ 1293 ument.querySel('.menu-light-card,view-cforEach(funcn(el) {
-+ 1294           e.op';
-+ 1295   el.style.transform = '0px)'   el.styition 'opacity 0. transform se';
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pizzas grandes artesanais no autêntico estilo americano. Massa de 48h, ingredientes premium e recheio até a borda. Peça pelo WhatsApp!">
+    <title>American Pizza Style - Pizzas Grandes Artesanais | Sobradinho DF</title>
+    
+    <!-- Fontes: Bebas Neue (título) + Inter (texto) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* ==================== VARIÁVEIS E RESET ==================== */
+        :root {
+            --preto: #0a0a0a;
+            --vermelho: #e63946;
+            --vermelho-escuro: #c1121f;
+            --branco: #ffffff;
+            --cinza-claro: #f5f5f5;
+            --cinza-escuro: #333333;
+            --amarelo: #ffd700;
+            --verde: #25D366;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--cinza-escuro);
+            line-height: 1.6;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        /* ==================== HEADER FIXO CLEAN ==================== */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 10, 10, 0.98);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            padding: 0.8rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2rem;
+            color: var(--vermelho);
+            text-decoration: none;
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--branco);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--vermelho);
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--branco);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* ==================== BARRA DE PROMOÇÃO ==================== */
+        .promo-bar {
+            position: fixed;
+            top: 76px;
+            width: 100%;
+            background: linear-gradient(90deg, var(--vermelho), var(--vermelho-escuro));
+            color: var(--branco);
+            text-align: center;
+            padding: 0.8rem;
+            z-index: 9999;
+            font-weight: 600;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .promo-bar .countdown {
+            background: var(--branco);
+            color: var(--vermelho);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 700;
+            margin-left: 1rem;
+        }
+
+        /* ==================== HERO SECTION ==================== */
+        .hero {
+            height: calc(100vh - 80px);
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.7)), 
+                        url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-4.0.3&auto=format&fit=crop&w=1981&q=80');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--branco);
+        }
+
+        .hero-content h1 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(3rem, 8vw, 6rem);
+            letter-spacing: 3px;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.7);
+        }
+
+        .hero-content .tagline {
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            margin-bottom: 0.5rem;
+            color: var(--cinza-claro);
+        }
+
+        .hero-content .subtitle {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--vermelho);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* ==================== BOTÕES ==================== */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: var(--vermelho);
+            color: var(--branco);
+            box-shadow: 0 4px 15px rgba(230, 57, 70, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: var(--vermelho-escuro);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(230, 57, 70, 0.5);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--branco);
+            border: 2px solid var(--branco);
+            margin-left: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--branco);
+            color: var(--preto);
+        }
+
+        /* ==================== SEÇÕES GERAIS ==================== */
+        section {
+            padding: 5rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--preto);
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--vermelho);
+            margin: 1rem auto;
+        }
+
+        /* ==================== SOBRE NÓS ==================== */
+        .about {
+            background: var(--cinza-claro);
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--preto);
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ==================== DESTAQUES ==================== */
+        .highlights {
+            background: var(--preto);
+            color: var(--branco);
+        }
+
+        .highlights .section-title {
+            color: var(--branco);
+        }
+
+        .highlights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .highlight-item {
+            text-align: center;
+            padding: 2rem;
+            border: 2px solid var(--cinza-escuro);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .highlight-item:hover {
+            border-color: var(--vermelho);
+            transform: translateY(-5px);
+        }
+
+        .highlight-icon {
+            font-size: 3rem;
+            color: var(--vermelho);
+            margin-bottom: 1rem;
+        }
+
+        .highlight-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ==================== COMO PEDIR ==================== */
+        .how-to-order {
+            background: var(--cinza-claro);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .step {
+            text-align: center;
+            padding: 2rem;
+            background: var(--branco);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .step-number {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 3rem;
+            color: var(--vermelho);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        /* ==================== AVALIAÇÕES ==================== */
+        .reviews {
+            background: var(--branco);
+        }
+
+        .review-carousel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .review-card {
+            background: var(--cinza-claro);
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .stars {
+            color: var(--amarelo);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-text {
+            font-style: italic;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .reviewer {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .reviewer-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--vermelho);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--branco);
+            font-weight: 700;
+        }
+
+        .reviewer-info h4 {
+            margin-bottom: 0.2rem;
+        }
+
+        .reviewer-info span {
+            font-size: 0.9rem;
+            color: var(--cinza-escuro);
+        }
+
+        /* ==================== CTA FINAL ==================== */
+        .cta-final {
+            background: linear-gradient(135deg, var(--vermelho), var(--vermelho-escuro));
+            color: var(--branco);
+            text-align: center;
+        }
+
+        .cta-final h2 {
+            font-family: 'Bebas Neue', cursive;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+        }
+
+        .cta-final p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ==================== FOOTER ==================== */
+        footer {
+            background: var(--preto);
+            color: var(--branco);
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: var(--vermelho);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--branco);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--vermelho);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: var(--cinza-escuro);
+            color: var(--branco);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--vermelho);
+            transform: scale(1.1);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid var(--cinza-escuro);
+            color: var(--cinza-escuro);
+        }
+
+        /* ==================== BOTÃO WHATSAPP FLUTUANTE ==================== */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: var(--verde);
+            color: var(--branco);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            z-index: 10000;
+            cursor: pointer;
+        }
+
+        .whatsapp-float:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        /* ==================== MODAL TRABALHO CONOSCO ==================== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 20000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--branco);
+            padding: 2.5rem;
+            border-radius: 15px;
+            max-width: 450px;
+            text-align: center;
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s;
+        }
+
+        .modal.show .modal-content {
+            transform: scale(1);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--cinza-escuro);
+        }
+
+        .modal-title {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2.5rem;
+            color: var(--vermelho);
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--cinza-claro);
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            border-color: var(--vermelho);
+        }
+
+        /* ==================== MODAL CUPONS ==================== */
+        .coupon-card {
+            background: var(--cinza-claro);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        .coupon-card h4 {
+            color: var(--vermelho);
+            margin-bottom: 0.5rem;
+        }
+
+        .coupon-card p {
+            margin-bottom: 0.3rem;
+        }
+
+        .coupon-card small {
+            color: var(--cinza-escuro);
+        }
+
+        /* ==================== RESPONSIVIDADE ==================== */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+
+            nav ul {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: var(--preto);
+                flex-direction: column;
+                align-items: center;
+                padding-top: 2rem;
+                transition: left 0.3s;
+            }
+
+            nav ul.active {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .hero-content .stats-bar {
+                gap: 1.5rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+            }
+
+            .btn-secondary {
+                margin-left: 0;
+                margin-top: 1rem;
+            }
+
+            .whatsapp-float {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        /* ==================== ANIMAÇÃO DE ENTRADA ==================== */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- ==================== HEADER FIXO CLEAN ==================== -->
+    <header>
+        <div class="header-container">
+            <a href="#home" class="logo">
+                <i class="fas fa-pizza-slice" style="color: var(--vermelho);"></i> American Pizza Style
+            </a>
+
+            <nav id="navMenu">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#sobre">Sobre Nós</a></li>
+                    <li><a href="#destaques">Destaques</a></li>
+                    <li><a href="#como-pedir">Como Pedir</a></li>
+                    <li><a href="#avaliacoes">Avaliações</a></li>
+                </ul>
+            </nav>
+
+            <!-- ÍCONE DE CUPONS -->
+            <div class="coupons-icon" onclick="showActiveCoupons()" title="Ver Cupons Ativos">
+                <i class="fas fa-ticket-alt" style="color: var(--amarelo); font-size: 1.5rem;"></i>
+                <span class="coupons-count">3</span>
+            </div>
+
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- ==================== BARRA DE PROMOÇÃO ==================== -->
+    <div class="promo-bar" id="promoBar">
+        <i class="fas fa-fire" style="margin-right: 0.5rem;"></i> PROMO RELÂMPAGO: 2 Pizzas Grandes por R$ 89,90 - Acaba em <span class="countdown" id="countdown">02:45:30</span>
+    </div>
+
+    <!-- ==================== HERO ==================== -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>AMERICAN PIZZA STYLE</h1>
+            <p class="tagline">Pizzas Grandes Artesanais</p>
+            <p class="subtitle">Sabor Autêntico, Estilo Americano · 35cm de Purra Diversão</p>
+            
+            <div class="stats-bar">
+                <div class="stat">
+                    <span class="stat-number">4.9</span>
+                    <span class="stat-label"><i class="fas fa-star"></i> Avaliação</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">2K+</span>
+                    <span class="stat-label"><i class="fas fa-users"></i> Clientes</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number">35cm</span>
+                    <span class="stat-label"><i class="fas fa-ruler"></i> Pizza Grande</span>
+                </div>
+            </div>
+
+            <!-- BOTÃO DIRETO PARA ANOTA AI -->
+            <div>
+                <a href="https://pedido.anota.ai/loja/american-pizza-style-aps?f=msa" class="btn btn-primary" target="_blank" onclick="trackEvent('anota_ai_cardapio')">
+                    <i class="fas fa-utensils"></i> Acessar Cardápio
+                </a>
+                <a href="https://wa.me/5561992683443?text=Quero%20fazer%20um%20pedido" class="btn btn-secondary" onclick="trackEvent('whatsapp_hero')">
+                    <i class="fab fa-whatsapp"></i> Pedir Agora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SOBRE NÓS ==================== -->
+    <section class="about fade-in" id="sobre">
+        <div class="container">
+            <h2 class="section-title">Nossa História</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3><i class="fas fa-flag-usa" style="color: var(--vermelho);"></i> Autêntico Estilo Americano</h3>
+                    <p>A American Pizza Style nasceu da paixão por aquelas pizzas de Nova York e Chicago: grandes, recheadas até a borda e feitas sem pressa.</p>
+                    <p>Nossa massa leva <strong>48 horas de fermentação natural</strong>, resultando em uma textura leve, borda aerada e aquele sabor inconfundível.</p>
+                    <p>Usamos apenas <strong>ingredientes selecionados</strong>: queijos premium, pepperoni artesanal, vegetais frescos e molhos preparados na casa.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1604382355076-af4b4eb4b4d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Pizzaiolo preparando pizza">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== DESTAQUES ==================== -->
+    <section class="highlights fade-in" id="destaques">
+        <div class="container">
+            <h2 class="section-title">Por Que Nossa Pizza É Diferente?</h2>
+            <div class="highlights-grid">
+                <div class="highlight-item">
+                    <div class="highlight-icon"><i class="fas fa-clock"></i></div>
+                    <h3>Massa de 48 Horas</h3>
+                    <p>Fermentação natural longa para uma textura leve, borda aerada e aquele sabor incomparável.</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-icon"><i class="fas fa-cheese"></i></div>
+                    <h3>Ingredientes Importados</h3>
+                    <p>Queijos premium, pepperoni artesanal e molhos preparados na casa com receitas da família.</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-icon"><i class="fas fa-pizza-slice"></i></div>
+                    <h3>Recheio Generoso</h3>
+                    <p>No autêntico estilo americano: cada fatia generosamente recheada até a borda.</p>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-icon"><i class="fas fa-shipping-fast"></i></div>
+                    <h3>Entrega Premium</h3>
+                    <p>Embalagens térmicas especiais, lacre de segurança e cuidado para chegar quentinha.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== COMO PEDIR ==================== -->
+    <section class="how-to-order fade-in" id="como-pedir">
+        <div class="container">
+            <h2 class="section-title">Como Pedir em 3 Passos</h2>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <h3>Acesse o Cardápio</h3>
+                    <p>Clique em "Acessar Cardápio" e explore nosso cardápio completo pelo sistema <strong>Anota Ai</strong>. Navegue por todas as categorias e veja fotos reais dos produtos.</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <h3>Escolha Seus Sabores</h3>
+                    <p>Selecione suas pizzas grandes favoritas (35cm), escolha as bordas e aproveite as promoções exclusivas.</p>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <h3>Receba em Casa</h3>
+                    <p>Confirme seu endereço em Sobradinho e aguarde. Entregamos quentinho em até <span id="deliveryTime">45 minutos</span>.</p>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <a href="https://wa.me/5561992683443?text=Quero%20fazer%20um%20pedido" class="btn btn-primary" onclick="trackEvent('whatsapp_final')">
+                    <i class="fab fa-whatsapp"></i> Fazer Pedido Agora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== AVALIAÇÕES ==================== -->
+    <section class="reviews fade-in" id="avaliacoes">
+        <div class="container">
+            <h2 class="section-title">O Que Nossos Clientes Dizem</h2>
+            <div class="review-carousel">
+                <div class="review-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="review-text">"A melhor pepperoni que já comi! Pizza grande com recheio absurdo, borda macia e entrega sempre pontual. Virou tradição de sexta-feira aqui em casa."</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar"><i class="fas fa-user"></i></div>
+                        <div class="reviewer-info">
+                            <h4>Marina Oliveira</h4>
+                            <span>Cliente frequente</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="review-text">"A massa é surpreendentemente leve para uma pizza tão grande e recheada. O molho caseiro faz toda diferença. Ingredientes visivelmente frescos."</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar"><i class="fas fa-user"></i></div>
+                        <div class="reviewer-info">
+                            <h4>Rafael Costa</h4>
+                            <span>Via Google Reviews</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="review-card">
+                    <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="review-text">"Atendimento excepcional pelo WhatsApp, promoção aplicada certinho e a pizza chegou quentíssima. É o verdadeiro estilo americano!"</p>
+                    <div class="reviewer">
+                        <div class="reviewer-avatar"><i class="fas fa-user"></i></div>
+                        <div class="reviewer-info">
+                            <h4>Juliana Santos</h4>
+                            <span>Primeira compra</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== CTA FINAL ==================== -->
+    <section class="cta-final fade-in">
+        <div class="container">
+            <h2>Pronto para Pedir?</h2>
+            <p>Peça sua pizza de 35cm agora e receba em até <span id="deliveryTime2">45 minutos</span></p>
+            <a href="https://wa.me/5561992683443?text=Quero%20fazer%20um%20pedido" class="btn btn-primary" style="font-size: 1.3rem; padding: 1.2rem 3rem;" onclick="trackEvent('whatsapp_cta_final')">
+                <i class="fab fa-whatsapp"></i> Peça pelo WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-pizza-slice" style="color: var(--vermelho);"></i> American Pizza Style</h3>
+                    <p>Autênticas pizzas no estilo americano, feitas com paixão e ingredientes premium.</p>
+                    <div class="social-links">
+                        <a href="https://wa.me/5561992683443"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3><i class="fas fa-info-circle"></i> Informações</h3>
+                    <ul>
+                        <li><i class="fas fa-calendar-alt"></i> Terça a Domingo: 18h - 23h</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Sobradinho, Brasília - DF</li>
+                        <li><i class="fas fa-envelope"></i> aps.pizzaria@gmail.com</li>
+                        <li><i class="fas fa-phone"></i> <a href="https://wa.me/5561992683443">(61) 99268-3443</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3><i class="fas fa-link"></i> Links Rápidos</h3>
+                    <ul>
+                        <li><i class="fas fa-external-link-alt"></i> <a href="#como-pedir">Como Pedir</a></li>
+                        <li><i class="fas fa-comments"></i> <a href="https://wa.me/5561992683443">WhatsApp</a></li>
+                        <li><i class="fas fa-star"></i> <a href="#avaliacoes">Avaliações</a></li>
+                        <li><i class="fas fa-briefcase"></i> <a href="#" onclick="showWorkWithUs()">Trabalhe Conosco</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3><i class="fas fa-cog"></i> Institucional</h3>
+                    <ul>
+                        <li><i class="fas fa-user-shield"></i> <a href="https://americanpizzastyle.com.br/NewSysPreci/index.html">Acesso Administrativo</a></li>
+                        <li><i class="fas fa-shield-alt"></i> <a href="#">Política de Privacidade</a></li>
+                        <li><i class="fas fa-file-contract"></i> <a href="#">Termos de Uso</a></li>
+                        <li><i class="fas fa-award"></i> <a href="#destaques">Qualidade</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 American Pizza Style. Todos os direitos reservados. | CNPJ: 00.000.000/0001-00</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== BOTÃO WHATSAPP FLUTUANTE ==================== -->
+    <a href="https://wa.me/5561992683443?text=Quero%20fazer%20um%20pedido" class="whatsapp-float" onclick="trackEvent('whatsapp_flutuante')">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <!-- ==================== MODAL CUPONS ATIVOS ==================== -->
+    <div class="modal" id="couponsModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeCouponsModal()"><i class="fas fa-times"></i></span>
+            <h2 class="modal-title"><i class="fas fa-ticket-alt"></i> Cupons Ativos</h2>
+            <div style="text-align: left; margin: 1.5rem 0;">
+                <div class="coupon-card">
+                    <h4>PRIMEIRA10</h4>
+                    <p>10% OFF na primeira compra</p>
+                    <small><i class="fas fa-info-circle"></i> Válido para pedidos acima de R$ 50</small>
+                </div>
+                <div class="coupon-card">
+                    <h4>TERCA30</h4>
+                    <p>30% OFF toda terça-feira</p>
+                    <small><i class="fas fa-info-circle"></i> Válido para pedidos pelo WhatsApp</small>
+                </div>
+                <div class="coupon-card">
+                    <h4>RETIRADA15</h4>
+                    <p>15% OFF para retirada na loja</p>
+                    <small><i class="fas fa-info-circle"></i> Peça pelo WhatsApp e retire</small>
+                </div>
+            </div>
+            <a href="https://wa.me/5561992683443?text=Quero%20usar%20um%20cupom" class="btn btn-primary">
+                <i class="fab fa-whatsapp"></i> Usar Cupom
+            </a>
+        </div>
+    </div>
+
+    <!-- ==================== MODAL TRABALHO CONOSCO ==================== -->
+    <div class="modal" id="workModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeWorkModal()"><i class="fas fa-times"></i></span>
+            <h2 class="modal-title"><i class="fas fa-briefcase"></i> Trabalhe Conosco</h2>
+            <form id="workForm" onsubmit="sendWorkApplication(event)">
+                <div class="form-group">
+                    <label for="name"><i class="fas fa-user"></i> Nome Completo</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone"><i class="fas fa-phone"></i> Telefone</label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="experience"><i class="fas fa-clipboard"></i> Experiência</label>
+                    <textarea id="experience" name="experience" rows="4" placeholder="Conte sobre sua experiência na área..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-paper-plane"></i> Enviar Candidatura
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // ==================== COUNTDOWN TIMER ====================
+        function startCountdown() {
+            let timeLeft = 2 * 60 * 60 + 45 * 60 + 30;
+            
+            setInterval(() => {
+                const hours = Math.floor(timeLeft / 3600);
+                const minutes = Math.floor((timeLeft % 3600) / 60);
+                const seconds = timeLeft % 60;
+                
+                const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                document.getElementById('countdown').textContent = formatted;
+                
+                if (timeLeft > 0) timeLeft--;
+            }, 1000);
+        }
+
+        // ==================== MODAL CUPONS ====================
+        function showActiveCoupons() {
+            document.getElementById('couponsModal').classList.add('show');
+        }
+
+        function closeCouponsModal() {
+            document.getElementById('couponsModal').classList.remove('show');
+        }
+
+        // ==================== MODAL TRABALHO ====================
+        function showWorkWithUs() {
+            document.getElementById('workModal').classList.add('show');
+        }
+
+        function closeWorkModal() {
+            document.getElementById('workModal').classList.remove('show');
+        }
+
+        function sendWorkApplication(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const experience = document.getElementById('experience').value;
+            
+            const message = `*NOVO CANDIDATO - APS*%0A%0A*Nome:* ${name}%0A*Telefone:* ${phone}%0A*Experiência:* ${experience}`;
+            
+            window.open(`https://wa.me/5561992683443?text=${message}`);
+            closeWorkModal();
+            
+            // Limpar formulário
+            document.getElementById('workForm').reset();
+        }
+
+        // ==================== TRACKING ====================
+        function trackEvent(eventName) {
+            console.log('Evento:', eventName);
+            if (typeof gtag !== 'undefined') {
+                gtag('event', eventName, {
+                    'event_category': 'Conversion',
+                    'event_label': 'American Pizza Style'
+                });
+            }
+        }
+
+        // ==================== DELIVERY TIME ====================
+        function updateDeliveryTime() {
+            const baseTime = 45;
+            const randomVariation = Math.floor(Math.random() * 15) - 7;
+            const finalTime = baseTime + randomVariation;
+            
+            document.getElementById('deliveryTime').textContent = `${finalTime} minutos`;
+            document.getElementById('deliveryTime2').textContent = `${finalTime} minutos`;
+        }
+
+        // ==================== MENU MOBILE ====================
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('navMenu').classList.toggle('active');
+        });
+
+        // ==================== SCROLL ANIMATION ====================
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+            updateDeliveryTime();
+            startCountdown();
+        });
+    </script>
+</body>
+</html>
