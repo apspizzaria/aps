@@ -1,597 +1,253 @@
-6529             link.click();
-  6530         }
-  6531 
-+ 6532         // ==================== MÓDULO PRECIFICAÇÃO E DRE ====================
-+ 6533 
-+ 6534         // Variáveis para armazenar configurações DRE
-+ 6535         let dreConfig = {
-+ 6536             productId: null,
-+ 6537             markup: 100,
-+ 6538             quantity: 100,
-+ 6539             taxSales: 8.5,
-+ 6540             cancellations: 2,
-+ 6541             returns: 1,
-+ 6542             platformFee: 12,
-+ 6543             rentUtilities: 3000,
-+ 6544             salaries: 5000,
-+ 6545             marketing: 500,
-+ 6546             otherExpenses: 500,
-+ 6547             financialExpenses: 200,
-+ 6548             irpj: 15,
-+ 6549             csll: 9
-+ 6550         };
-+ 6551 
-+ 6552         // Inicializa o módulo DRE
-+ 6553         function renderDRE() {
-+ 6554             // Popula select de produtos
-+ 6555             const productSelect = document.getElementById('dreProductSelect');
-+ 6556             if (productSelect) {
-+ 6557                 productSelect.innerHTML = '<option value="">Selecione uma pizza...</option>';
-+ 6558                 pizzas.forEach(pizza => {
-+ 6559                     productSelect.innerHTML += `<option value="${pizza.id}">${pizza.name} - CMV: R$ ${pizza.totalCost.toFixed(2)}</option>`;
-+ 6560                 });
-+ 6561 
-+ 6562                 // Restaura seleção anterior se existir
-+ 6563                 if (dreConfig.productId) {
-+ 6564                     productSelect.value = dreConfig.productId;
-+ 6565                 }
-+ 6566             }
-+ 6567 
-+ 6568             updateDRESimulation();
-+ 6569         }
-+ 6570 
-+ 6571         // Aplica regime tributário predefinido
-+ 6572         function applyTaxRegime() {
-+ 6573             const regime = document.getElementById('dreTaxRegime').value;
-+ 6574 
-+ 6575             switch(regime) {
-+ 6576                 case 'simples':
-+ 6577                     // Simples Nacional - alíquota única que já inclui todos os tributos
-+ 6578                     document.getElementById('dreTaxSales').value = 6;
-+ 6579                     document.getElementById('dreIRPJ').value = 0;
-+ 6580                     document.getElementById('dreCSLL').value = 0;
-+ 6581                     break;
-+ 6582                 case 'presumido':
-+ 6583                     // Lucro Presumido
-+ 6584                     document.getElementById('dreTaxSales').value = 11.33;
-+ 6585                     document.getElementById('dreIRPJ').value = 15;
-+ 6586                     document.getElementById('dreCSLL').value = 9;
-+ 6587                     break;
-+ 6588                 case 'real':
-+ 6589                     // Lucro Real
-+ 6590                     document.getElementById('dreTaxSales').value = 9.25;
-+ 6591                     document.getElementById('dreIRPJ').value = 25;
-+ 6592                     document.getElementById('dreCSLL').value = 9;
-+ 6593                     break;
-+ 6594                 case 'custom':
-+ 6595                 default:
-+ 6596                     // Não altera - mantém valores personalizados
-+ 6597                     break;
-+ 6598             }
-+ 6599         }
-+ 6600 
-+ 6601         // Carrega custos operacionais do sistema
-+ 6602         function loadSystemCosts() {
-+ 6603             if (operationalCosts) {
-+ 6604                 const rent = (operationalCosts.rent || 0) +
-+ 6605                              (operationalCosts.electricity || 0) +
-+ 6606                              (operationalCosts.water || 0) +
-+ 6607                              (operationalCosts.gas || 0) +
-+ 6608                              (operationalCosts.internet || 0);
-+ 6609 
-+ 6610                 document.getElementById('dreRentUtilities').value = rent;
-+ 6611                 document.getElementById('dreSalaries').value = operationalCosts.salaries || 0;
-+ 6612                 document.getElementById('dreMarketing').value = operationalCosts.marketing || 0;
-+ 6613 
-+ 6614                 const other = (operationalCosts.cleaning || 0) +
-+ 6615                               (operationalCosts.bankFees || 0) +
-+ 6616                               (operationalCosts.others || 0);
-+ 6617                 document.getElementById('dreOtherExpenses').value = other;
-+ 6618 
-+ 6619                 updateDRESimulation();
-+ 6620                 showAlert('Custos operacionais carregados com sucesso!');
-+ 6621             }
-+ 6622         }
-+ 6623 
-+ 6624         // Função principal de cálculo do DRE
-+ 6625         function calculateDRE(params = {}) {
-+ 6626             // Obtém parâmetros dos inputs ou usa os passados
-+ 6627             const productId = params.productId !== undefined ? params.productId :
-+ 6628                               parseInt(document.getElementById('dreProductSelect')?.value) || null;
-+ 6629             const markup = params.markup !== undefined ? params.markup :
-+ 6630                            parseFloat(document.getElementById('dreMarkup')?.value) || 100;
-+ 6631             const quantity = params.quantity !== undefined ? params.quantity :
-+ 6632                              parseInt(document.getElementById('dreQuantity')?.value) || 100;
-+ 6633             const taxSales = params.taxSales !== undefined ? params.taxSales :
-+ 6634                              parseFloat(document.getElementById('dreTaxSales')?.value) || 8.5;
-+ 6635             const cancellations = params.cancellations !== undefined ? params.cancellations :
-+ 6636                                   parseFloat(document.getElementById('dreCancellations')?.value) || 2;
-+ 6637             const returns = params.returns !== undefined ? params.returns :
-+ 6638                             parseFloat(document.getElementById('dreReturns')?.value) || 1;
-+ 6639             const platformFee = params.platformFee !== undefined ? params.platformFee :
-+ 6640                                 parseFloat(document.getElementById('drePlatformFee')?.value) || 12;
-+ 6641             const rentUtilities = params.rentUtilities !== undefined ? params.rentUtilities :
-+ 6642                                   parseFloat(document.getElementById('dreRentUtilities')?.value) || 3000;
-+ 6643             const salaries = params.salaries !== undefined ? params.salaries :
-+ 6644                              parseFloat(document.getElementById('dreSalaries')?.value) || 5000;
-+ 6645             const marketing = params.marketing !== undefined ? params.marketing :
-+ 6646                               parseFloat(document.getElementById('dreMarketing')?.value) || 500;
-+ 6647             const otherExpenses = params.otherExpenses !== undefined ? params.otherExpenses :
-+ 6648                                   parseFloat(document.getElementById('dreOtherExpenses')?.value) || 500;
-+ 6649             const financialExpenses = params.financialExpenses !== undefined ? params.financialExpenses :
-+ 6650                                       parseFloat(document.getElementById('dreFinancialExpenses')?.value) || 200;
-+ 6651             const irpj = params.irpj !== undefined ? params.irpj :
-+ 6652                          parseFloat(document.getElementById('dreIRPJ')?.value) || 15;
-+ 6653             const csll = params.csll !== undefined ? params.csll :
-+ 6654                          parseFloat(document.getElementById('dreCSLL')?.value) || 9;
-+ 6655 
-+ 6656             // Obtém produto selecionado
-+ 6657             const product = pizzas.find(p => p.id === productId);
-+ 6658             const cmv = product ? product.totalCost : 0;
-+ 6659 
-+ 6660             // 1. PRECIFICAÇÃO
-+ 6661             // Preço de Venda = CMV × Markup (onde Markup = 1 + markup%/100)
-+ 6662             const markupMultiplier = 1 + (markup / 100);
-+ 6663             const salePrice = cmv * markupMultiplier;
-+ 6664 
-+ 6665             // 2. RECEITA
-+ 6666             // Receita Bruta = Preço de Venda × Quantidade Vendida
-+ 6667             const grossRevenue = salePrice * quantity;
-+ 6668 
-+ 6669             // Deduções da Receita
-+ 6670             const taxSalesValue = grossRevenue * (taxSales / 100);
-+ 6671             const cancellationsValue = grossRevenue * (cancellations / 100);
-+ 6672             const returnsValue = grossRevenue * (returns / 100);
-+ 6673             const platformFeeValue = grossRevenue * (platformFee / 100);
-+ 6674             const totalDeductions = taxSalesValue + cancellationsValue + returnsValue + platformFeeValue;
-+ 6675 
-+ 6676             // Receita Líquida = Receita Bruta - Impostos - Cancelamentos - Devoluções
-+ 6677             const netRevenue = grossRevenue - totalDeductions;
-+ 6678 
-+ 6679             // 3. RESULTADO
-+ 6680             // CMV Total
-+ 6681             const totalCMV = cmv * quantity;
-+ 6682 
-+ 6683             // Lucro Bruto = Receita Líquida - CMV
-+ 6684             const grossProfit = netRevenue - totalCMV;
-+ 6685 
-+ 6686             // Despesas Operacionais
-+ 6687             const totalOperationalExpenses = rentUtilities + salaries + marketing + otherExpenses;
-+ 6688 
-+ 6689             // Resultado Operacional (EBITDA) = Lucro Bruto - Despesas Operacionais
-+ 6690             const operationalResult = grossProfit - totalOperationalExpenses;
-+ 6691 
-+ 6692             // Lucro Antes dos Impostos = Resultado Operacional - Despesas Financeiras
-+ 6693             const profitBeforeTax = operationalResult - financialExpenses;
-+ 6694 
-+ 6695             // Impostos sobre o Lucro (apenas se houver lucro)
-+ 6696             const irpjValue = profitBeforeTax > 0 ? profitBeforeTax * (irpj / 100) : 0;
-+ 6697             const csllValue = profitBeforeTax > 0 ? profitBeforeTax * (csll / 100) : 0;
-+ 6698             const totalIncomeTax = irpjValue + csllValue;
-+ 6699 
-+ 6700             // Lucro Líquido = Lucro Antes dos Impostos - IRPJ - CSLL
-+ 6701             const netProfit = profitBeforeTax - totalIncomeTax;
-+ 6702 
-+ 6703             // 4. INDICADORES
-+ 6704             // Margem de Lucro Líquida = (Lucro Líquido ÷ Receita Líquida) × 100
-+ 6705             const netMargin = netRevenue > 0 ? (netProfit / netRevenue) * 100 : 0;
-+ 6706             const grossMargin = netRevenue > 0 ? (grossProfit / netRevenue) * 100 : 0;
-+ 6707             const operationalMargin = netRevenue > 0 ? (operationalResult / netRevenue) * 100 : 0;
-+ 6708 
-+ 6709             // Ponto de Equilíbrio
-+ 6710             const contributionMarginUnit = salePrice - cmv - (salePrice * (taxSales + cancellations + returns + platformFee) / 100);
-+ 6711             const fixedCosts = totalOperationalExpenses + financialExpenses;
-+ 6712             const breakeven = contributionMarginUnit > 0 ? Math.ceil(fixedCosts / contributionMarginUnit) : 0;
-+ 6713 
-+ 6714             return {
-+ 6715                 // Inputs
-+ 6716                 cmv,
-+ 6717                 salePrice,
-+ 6718                 markupMultiplier,
-+ 6719                 quantity,
-+ 6720 
-+ 6721                 // Receita
-+ 6722                 grossRevenue,
-+ 6723                 taxSalesValue,
-+ 6724                 cancellationsValue,
-+ 6725                 returnsValue,
-+ 6726                 platformFeeValue,
-+ 6727                 totalDeductions,
-+ 6728                 netRevenue,
-+ 6729 
-+ 6730                 // Custos e Despesas
-+ 6731                 totalCMV,
-+ 6732                 grossProfit,
-+ 6733                 rentUtilities,
-+ 6734                 salaries,
-+ 6735                 marketing,
-+ 6736                 otherExpenses,
-+ 6737                 totalOperationalExpenses,
-+ 6738                 operationalResult,
-+ 6739                 financialExpenses,
-+ 6740                 profitBeforeTax,
-+ 6741                 irpjValue,
-+ 6742                 csllValue,
-+ 6743                 totalIncomeTax,
-+ 6744                 netProfit,
-+ 6745 
-+ 6746                 // Margens
-+ 6747                 netMargin,
-+ 6748                 grossMargin,
-+ 6749                 operationalMargin,
-+ 6750                 breakeven,
-+ 6751 
-+ 6752                 // Percentuais sobre Receita Bruta
-+ 6753                 percentages: {
-+ 6754                     taxSales: (taxSalesValue / grossRevenue * 100) || 0,
-+ 6755                     cancellations: (cancellationsValue / grossRevenue * 100) || 0,
-+ 6756                     returns: (returnsValue / grossRevenue * 100) || 0,
-+ 6757                     platformFee: (platformFeeValue / grossRevenue * 100) || 0,
-+ 6758                     netRevenue: (netRevenue / grossRevenue * 100) || 0,
-+ 6759                     totalCMV: (totalCMV / grossRevenue * 100) || 0,
-+ 6760                     grossProfit: (grossProfit / grossRevenue * 100) || 0,
-+ 6761                     operationalExpenses: (totalOperationalExpenses / grossRevenue * 100) || 0,
-+ 6762                     operationalResult: (operationalResult / grossRevenue * 100) || 0,
-+ 6763                     financialExpenses: (financialExpenses / grossRevenue * 100) || 0,
-+ 6764                     profitBeforeTax: (profitBeforeTax / grossRevenue * 100) || 0,
-+ 6765                     incomeTax: (totalIncomeTax / grossRevenue * 100) || 0,
-+ 6766                     netProfit: (netProfit / grossRevenue * 100) || 0
-+ 6767                 }
-+ 6768             };
-+ 6769         }
-+ 6770 
-+ 6771         // Atualiza toda a simulação DRE
-+ 6772         function updateDRESimulation() {
-+ 6773             const dre = calculateDRE();
-+ 6774 
-+ 6775             // Atualiza displays de Precificação
-+ 6776             document.getElementById('dreCMVDisplay').textContent = `R$ ${dre.cmv.toFixed(2)}`;
-+ 6777             document.getElementById('dreMarkupDisplay').textContent = `${dre.markupMultiplier.toFixed(2)}x`;
-+ 6778             document.getElementById('dreSalePriceDisplay').textContent = `R$ ${dre.salePrice.toFixed(2)}`;
-+ 6779             document.getElementById('dreGrossProfitUnit').textContent = `R$ ${(dre.salePrice - dre.cmv).toFixed(2)}`;
-+ 6780 
-+ 6781             // Atualiza tabela DRE
-+ 6782             renderDRETable(dre);
-+ 6783 
-+ 6784             // Atualiza indicadores
-+ 6785             updateDREIndicators(dre);
-+ 6786 
-+ 6787             // Atualiza análise de sensibilidade
-+ 6788             updateSensitivityAnalysis(dre);
-+ 6789 
-+ 6790             // Atualiza gráfico de composição
-+ 6791             renderPriceComposition(dre);
-+ 6792         }
-+ 6793 
-+ 6794         // Renderiza a tabela DRE
-+ 6795         function renderDRETable(dre) {
-+ 6796             const tbody = document.getElementById('dreTableBody');
-+ 6797             if (!tbody) return;
-+ 6798 
-+ 6799             const formatCurrency = (value) => `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-+ 6800             const formatPercent = (value) => `${value.toFixed(2)}%`;
-+ 6801             const getImpactBar = (percent, isPositive) => {
-+ 6802                 const width = Math.min(Math.abs(percent), 100);
-+ 6803                 const color = isPositive ? 'bg-green-500' : 'bg-red-500';
-+ 6804                 return `<div class="w-24 bg-gray-200 rounded-full h-3 mx-auto">
-+ 6805                     <div class="${color} h-3 rounded-full" style="width: ${width}%"></div>
-+ 6806                 </div>`;
-+ 6807             };
-+ 6808 
-+ 6809             tbody.innerHTML = `
-+ 6810                 <!-- Receita Bruta -->
-+ 6811                 <tr class="bg-blue-50 font-semibold border-b border-blue-200">
-+ 6812                     <td class="py-3 px-4 text-left text-blue-800">📈 RECEITA BRUTA</td>
-+ 6813                     <td class="py-3 px-4 text-right text-blue-800">${formatCurrency(dre.grossRevenue)}</td>
-+ 6814                     <td class="py-3 px-4 text-right text-blue-800">100,00%</td>
-+ 6815                     <td class="py-3 px-4 text-center">${getImpactBar(100, true)}</td>
-+ 6816                 </tr>
-+ 6817 
-+ 6818                 <!-- Deduções -->
-+ 6819                 <tr class="border-b border-gray-100 hover:bg-gray-50">
-+ 6820                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Impostos sobre Venda</td>
-+ 6821                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.taxSalesValue)})</td>
-+ 6822                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.percentages.taxSales)}</td>
-+ 6823                     <td class="py-2 px-4 text-center">${getImpactBar(dre.percentages.taxSales, false)}</td>
-+ 6824                 </tr>
-+ 6825                 <tr class="border-b border-gray-100 hover:bg-gray-50">
-+ 6826                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Cancelamentos</td>
-+ 6827                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.cancellationsValue)})</td>
-+ 6828                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.percentages.cancellations)}</td>
-+ 6829                     <td class="py-2 px-4 text-center">${getImpactBar(dre.percentages.cancellations, false)}</td>
-+ 6830                 </tr>
-+ 6831                 <tr class="border-b border-gray-100 hover:bg-gray-50">
-+ 6832                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Devoluções</td>
-+ 6833                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.returnsValue)})</td>
-+ 6834                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.percentages.returns)}</td>
-+ 6835                     <td class="py-2 px-4 text-center">${getImpactBar(dre.percentages.returns, false)}</td>
-+ 6836                 </tr>
-+ 6837                 <tr class="border-b border-gray-200 hover:bg-gray-50">
-+ 6838                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Taxas de Plataforma</td>
-+ 6839                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.platformFeeValue)})</td>
-+ 6840                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.percentages.platformFee)}</td>
-+ 6841                     <td class="py-2 px-4 text-center">${getImpactBar(dre.percentages.platformFee, false)}</td>
-+ 6842                 </tr>
-+ 6843 
-+ 6844                 <!-- Receita Líquida -->
-+ 6845                 <tr class="bg-green-50 font-semibold border-b border-green-200">
-+ 6846                     <td class="py-3 px-4 text-left text-green-800">💵 RECEITA LÍQUIDA</td>
-+ 6847                     <td class="py-3 px-4 text-right text-green-800">${formatCurrency(dre.netRevenue)}</td>
-+ 6848                     <td class="py-3 px-4 text-right text-green-800">${formatPercent(dre.percentages.netRevenue)}</td>
-+ 6849                     <td class="py-3 px-4 text-center">${getImpactBar(dre.percentages.netRevenue, true)}</td>
-+ 6850                 </tr>
-+ 6851 
-+ 6852                 <!-- CMV -->
-+ 6853                 <tr class="border-b border-gray-200 hover:bg-gray-50">
-+ 6854                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) CMV (Custo da Mercadoria Vendida)</td>
-+ 6855                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.totalCMV)})</td>
-+ 6856                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.percentages.totalCMV)}</td>
-+ 6857                     <td class="py-2 px-4 text-center">${getImpactBar(dre.percentages.totalCMV, false)}</td>
-+ 6858                 </tr>
-+ 6859 
-+ 6860                 <!-- Lucro Bruto -->
-+ 6861                 <tr class="bg-purple-50 font-semibold border-b border-purple-200">
-+ 6862                     <td class="py-3 px-4 text-left text-purple-800">📊 LUCRO BRUTO</td>
-+ 6863                     <td class="py-3 px-4 text-right ${dre.grossProfit >= 0 ? 'text-purple-800' : 'text-red-600'}">${formatCurrency(dre.grossProfit)}</td>
-+ 6864                     <td class="py-3 px-4 text-right text-purple-800">${formatPercent(dre.percentages.grossProfit)}</td>
-+ 6865                     <td class="py-3 px-4 text-center">${getImpactBar(dre.percentages.grossProfit, dre.grossProfit >= 0)}</td>
-+ 6866                 </tr>
-+ 6867 
-+ 6868                 <!-- Despesas Operacionais -->
-+ 6869                 <tr class="border-b border-gray-100 hover:bg-gray-50">
-+ 6870                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Aluguel e Contas</td>
-+ 6871                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.rentUtilities)})</td>
-+ 6872                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.grossRevenue > 0 ? dre.rentUtilities / dre.grossRevenue * 100 : 0)}</td>
-+ 6873                     <td class="py-2 px-4 text-center">${getImpactBar(dre.grossRevenue > 0 ? dre.rentUtilities / dre.grossRevenue * 100 : 0, false)}</td>
-+ 6874                 </tr>
-+ 6875                 <tr class="border-b border-gray-100 hover:bg-gray-50">
-+ 6876                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Salários e Encargos</td>
-+ 6877                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.salaries)})</td>
-+ 6878                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.grossRevenue > 0 ? dre.salaries / dre.grossRevenue * 100 : 0)}</td>
-+ 6879                     <td class="py-2 px-4 text-center">${getImpactBar(dre.grossRevenue > 0 ? dre.salaries / dre.grossRevenue * 100 : 0, false)}</td>
-+ 6880                 </tr>
-+ 6881                 <tr class="border-b border-gray-100 hover:bg-gray-50">
-+ 6882                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Marketing</td>
-+ 6883                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.marketing)})</td>
-+ 6884                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.grossRevenue > 0 ? dre.marketing / dre.grossRevenue * 100 : 0)}</td>
-+ 6885                     <td class="py-2 px-4 text-center">${getImpactBar(dre.grossRevenue > 0 ? dre.marketing / dre.grossRevenue * 100 : 0, false)}</td>
-+ 6886                 </tr>
-+ 6887                 <tr class="border-b border-gray-200 hover:bg-gray-50">
-+ 6888                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Outras Despesas</td>
-+ 6889                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.otherExpenses)})</td>
-+ 6890                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.grossRevenue > 0 ? dre.otherExpenses / dre.grossRevenue * 100 : 0)}</td>
-+ 6891                     <td class="py-2 px-4 text-center">${getImpactBar(dre.grossRevenue > 0 ? dre.otherExpenses / dre.grossRevenue * 100 : 0, false)}</td>
-+ 6892                 </tr>
-+ 6893 
-+ 6894                 <!-- Resultado Operacional (EBITDA) -->
-+ 6895                 <tr class="bg-orange-50 font-semibold border-b border-orange-200">
-+ 6896                     <td class="py-3 px-4 text-left text-orange-800">⚡ RESULTADO OPERACIONAL (EBITDA)</td>
-+ 6897                     <td class="py-3 px-4 text-right ${dre.operationalResult >= 0 ? 'text-orange-800' : 'text-red-600'}">${formatCurrency(dre.operationalResult)}</td>
-+ 6898                     <td class="py-3 px-4 text-right text-orange-800">${formatPercent(dre.percentages.operationalResult)}</td>
-+ 6899                     <td class="py-3 px-4 text-center">${getImpactBar(Math.abs(dre.percentages.operationalResult), dre.operationalResult >= 0)}</td>
-+ 6900                 </tr>
-+ 6901 
-+ 6902                 <!-- Despesas Financeiras -->
-+ 6903                 <tr class="border-b border-gray-200 hover:bg-gray-50">
-+ 6904                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) Despesas Financeiras</td>
-+ 6905                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.financialExpenses)})</td>
-+ 6906                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.percentages.financialExpenses)}</td>
-+ 6907                     <td class="py-2 px-4 text-center">${getImpactBar(dre.percentages.financialExpenses, false)}</td>
-+ 6908                 </tr>
-+ 6909 
-+ 6910                 <!-- Lucro Antes dos Impostos -->
-+ 6911                 <tr class="bg-yellow-50 font-semibold border-b border-yellow-200">
-+ 6912                     <td class="py-3 px-4 text-left text-yellow-800">📋 LUCRO ANTES DOS IMPOSTOS</td>
-+ 6913                     <td class="py-3 px-4 text-right ${dre.profitBeforeTax >= 0 ? 'text-yellow-800' : 'text-red-600'}">${formatCurrency(dre.profitBeforeTax)}</td>
-+ 6914                     <td class="py-3 px-4 text-right text-yellow-800">${formatPercent(dre.percentages.profitBeforeTax)}</td>
-+ 6915                     <td class="py-3 px-4 text-center">${getImpactBar(Math.abs(dre.percentages.profitBeforeTax), dre.profitBeforeTax >= 0)}</td>
-+ 6916                 </tr>
-+ 6917 
-+ 6918                 <!-- Impostos sobre Lucro -->
-+ 6919                 <tr class="border-b border-gray-100 hover:bg-gray-50">
-+ 6920                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) IRPJ</td>
-+ 6921                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.irpjValue)})</td>
-+ 6922                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.grossRevenue > 0 ? dre.irpjValue / dre.grossRevenue * 100 : 0)}</td>
-+ 6923                     <td class="py-2 px-4 text-center">${getImpactBar(dre.grossRevenue > 0 ? dre.irpjValue / dre.grossRevenue * 100 : 0, false)}</td>
-+ 6924                 </tr>
-+ 6925                 <tr class="border-b border-gray-200 hover:bg-gray-50">
-+ 6926                     <td class="py-2 px-4 text-left pl-8 text-gray-600">(-) CSLL</td>
-+ 6927                     <td class="py-2 px-4 text-right text-red-600">(${formatCurrency(dre.csllValue)})</td>
-+ 6928                     <td class="py-2 px-4 text-right text-red-600">${formatPercent(dre.grossRevenue > 0 ? dre.csllValue / dre.grossRevenue * 100 : 0)}</td>
-+ 6929                     <td class="py-2 px-4 text-center">${getImpactBar(dre.grossRevenue > 0 ? dre.csllValue / dre.grossRevenue * 100 : 0, false)}</td>
-+ 6930                 </tr>
-+ 6931 
-+ 6932                 <!-- Lucro Líquido -->
-+ 6933                 <tr class="bg-gradient-to-r from-green-100 to-emerald-100 font-bold border-t-2 border-green-400">
-+ 6934                     <td class="py-4 px-4 text-left text-green-900 text-lg">💰 LUCRO LÍQUIDO</td>
-+ 6935                     <td class="py-4 px-4 text-right text-lg ${dre.netProfit >= 0 ? 'text-green-900' : 'text-red-600'}">${formatCurrency(dre.netProfit)}</td>
-+ 6936                     <td class="py-4 px-4 text-right text-green-900 text-lg">${formatPercent(dre.percentages.netProfit)}</td>
-+ 6937                     <td class="py-4 px-4 text-center">${getImpactBar(Math.abs(dre.percentages.netProfit), dre.netProfit >= 0)}</td>
-+ 6938                 </tr>
-+ 6939             `;
-+ 6940         }
-+ 6941 
-+ 6942         // Atualiza indicadores de performance
-+ 6943         function updateDREIndicators(dre) {
-+ 6944             // Margem Líquida
-+ 6945             const netMarginEl = document.getElementById('dreNetMargin');
-+ 6946             const marginIcon = document.getElementById('dreMarginIcon');
-+ 6947             netMarginEl.textContent = `${dre.netMargin.toFixed(1)}%`;
-+ 6948 
-+ 6949             // Atualiza cor e ícone baseado na margem
-+ 6950             if (dre.netMargin >= 15) {
-+ 6951                 netMarginEl.className = 'text-3xl font-bold text-green-600';
-+ 6952                 marginIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-+ 6953                 marginIcon.className = 'w-12 h-12 text-green-500';
-+ 6954             } else if (dre.netMargin >= 5) {
-+ 6955                 netMarginEl.className = 'text-3xl font-bold text-yellow-600';
-+ 6956                 marginIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>';
-+ 6957                 marginIcon.className = 'w-12 h-12 text-yellow-500';
-+ 6958             } else {
-+ 6959                 netMarginEl.className = 'text-3xl font-bold text-red-600';
-+ 6960                 marginIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>';
-+ 6961                 marginIcon.className = 'w-12 h-12 text-red-500';
-+ 6962             }
-+ 6963 
-+ 6964             // Outros indicadores
-+ 6965             document.getElementById('dreGrossMargin').textContent = `${dre.grossMargin.toFixed(1)}%`;
-+ 6966             document.getElementById('dreOperationalMargin').textContent = `${dre.operationalMargin.toFixed(1)}%`;
-+ 6967             document.getElementById('dreBreakeven').textContent = `${dre.breakeven.toLocaleString('pt-BR')} un.`;
-+ 6968         }
-+ 6969 
-+ 6970         // Atualiza análise de sensibilidade
-+ 6971         function updateSensitivityAnalysis(dre) {
-+ 6972             const baseNetProfit = dre.netProfit;
-+ 6973 
-+ 6974             // Cenário 1: Aumentar Markup em 10%
-+ 6975             const currentMarkup = parseFloat(document.getElementById('dreMarkup')?.value) || 100;
-+ 6976             const scenario1 = calculateDRE({ markup: currentMarkup * 1.1 });
-+ 6977             const diff1 = scenario1.netProfit - baseNetProfit;
-+ 6978             document.getElementById('dreSensMarkup').textContent = `${diff1 >= 0 ? '+' : ''}R$ ${diff1.toFixed(2)} no lucro`;
-+ 6979             document.getElementById('dreSensMarkup').className = `text-lg font-bold ${diff1 >= 0 ? 'text-blue-600' : 'text-red-600'}`;
-+ 6980 
-+ 6981             // Cenário 2: Aumentar quantidade em 20%
-+ 6982             const currentQty = parseInt(document.getElementById('dreQuantity')?.value) || 100;
-+ 6983             const scenario2 = calculateDRE({ quantity: Math.ceil(currentQty * 1.2) });
-+ 6984             const diff2 = scenario2.netProfit - baseNetProfit;
-+ 6985             document.getElementById('dreSensQuantity').textContent = `${diff2 >= 0 ? '+' : ''}R$ ${diff2.toFixed(2)} no lucro`;
-+ 6986             document.getElementById('dreSensQuantity').className = `text-lg font-bold ${diff2 >= 0 ? 'text-green-600' : 'text-red-600'}`;
-+ 6987 
-+ 6988             // Cenário 3: Reduzir CMV em 10% (simula negociação com fornecedor)
-+ 6989             const productId = parseInt(document.getElementById('dreProductSelect')?.value) || null;
-+ 6990             const product = pizzas.find(p => p.id === productId);
-+ 6991             if (product) {
-+ 6992                 const reducedCMV = product.totalCost * 0.9;
-+ 6993                 const fakeProduct = { ...product, totalCost: reducedCMV };
-+ 6994                 const originalPizzas = [...pizzas];
-+ 6995                 const idx = pizzas.findIndex(p => p.id === productId);
-+ 6996                 pizzas[idx] = fakeProduct;
-+ 6997                 const scenario3 = calculateDRE();
-+ 6998                 pizzas[idx] = product; // Restaura
-+ 6999                 const diff3 = scenario3.netProfit - baseNetProfit;
-+ 7000                 document.getElementById('dreSensCMV').textContent = `${diff3 >= 0 ? '+' : ''}R$ ${diff3.toFixed(2)} no lucro`;
-+ 7001                 document.getElementById('dreSensCMV').className = `text-lg font-bold ${diff3 >= 0 ? 'text-red-600' : 'text-red-600'}`;
-+ 7002             } else {
-+ 7003                 document.getElementById('dreSensCMV').textContent = 'Selecione um produto';
-+ 7004             }
-+ 7005 
-+ 7006             // Cenário 4: Reduzir despesas em 15%
-+ 7007             const rentUtilities = parseFloat(document.getElementById('dreRentUtilities')?.value) || 3000;
-+ 7008             const salaries = parseFloat(document.getElementById('dreSalaries')?.value) || 5000;
-+ 7009             const marketing = parseFloat(document.getElementById('dreMarketing')?.value) || 500;
-+ 7010             const otherExpenses = parseFloat(document.getElementById('dreOtherExpenses')?.value) || 500;
-+ 7011             const scenario4 = calculateDRE({
-+ 7012                 rentUtilities: rentUtilities * 0.85,
-+ 7013                 salaries: salaries * 0.85,
-+ 7014                 marketing: marketing * 0.85,
-+ 7015                 otherExpenses: otherExpenses * 0.85
-+ 7016             });
-+ 7017             const diff4 = scenario4.netProfit - baseNetProfit;
-+ 7018             document.getElementById('dreSensExpenses').textContent = `${diff4 >= 0 ? '+' : ''}R$ ${diff4.toFixed(2)} no lucro`;
-+ 7019             document.getElementById('dreSensExpenses').className = `text-lg font-bold ${diff4 >= 0 ? 'text-purple-600' : 'text-red-600'}`;
-+ 7020         }
-+ 7021 
-+ 7022         // Renderiza composição do preço
-+ 7023         function renderPriceComposition(dre) {
-+ 7024             const container = document.getElementById('drePriceComposition');
-+ 7025             const chartContainer = document.getElementById('dreWaterfallChart');
-+ 7026             if (!container || !chartContainer) return;
-+ 7027 
-+ 7028             const grossRevenue = dre.grossRevenue || 1;
-+ 7029 
-+ 7030             const items = [
-+ 7031                 { label: 'CMV', value: dre.totalCMV, color: 'bg-red-500', percent: dre.percentages.totalCMV },
-+ 7032                 { label: 'Impostos', value: dre.taxSalesValue, color: 'bg-orange-500', percent: dre.percentages.taxSales },
-+ 7033                 { label: 'Plataforma', value: dre.platformFeeValue, color: 'bg-yellow-500', percent: dre.percentages.platformFee },
-+ 7034                 { label: 'Desp. Operacionais', value: dre.totalOperationalExpenses, color: 'bg-blue-500', percent: dre.percentages.operationalExpenses },
-+ 7035                 { label: 'Desp. Financeiras', value: dre.financialExpenses, color: 'bg-purple-500', percent: dre.percentages.financialExpenses },
-+ 7036                 { label: 'IR + CSLL', value: dre.totalIncomeTax, color: 'bg-pink-500', percent: dre.percentages.incomeTax },
-+ 7037                 { label: 'Lucro Líquido', value: dre.netProfit, color: dre.netProfit >= 0 ? 'bg-green-500' : 'bg-red-700', percent: Math.abs(dre.percentages.netProfit) }
-+ 7038             ];
-+ 7039 
-+ 7040             container.innerHTML = items.map(item => `
-+ 7041                 <div class="flex items-center space-x-2 px-4 py-2 rounded-lg bg-gray-50 border border-gray-200">
-+ 7042                     <div class="w-4 h-4 ${item.color} rounded"></div>
-+ 7043                     <span class="text-sm font-medium text-gray-700">${item.label}:</span>
-+ 7044                     <span class="text-sm text-gray-600">${item.percent.toFixed(1)}%</span>
-+ 7045                 </div>
-+ 7046             `).join('');
-+ 7047 
-+ 7048             // Waterfall Chart simplificado
-+ 7049             const maxHeight = 200;
-+ 7050             const maxValue = Math.max(dre.grossRevenue, 1);
-+ 7051 
-+ 7052             chartContainer.innerHTML = `
-+ 7053                 <div class="flex flex-col items-center">
-+ 7054                     <div class="bg-blue-500 rounded-t" style="height: ${maxHeight}px; width: 60px;"></div>
-+ 7055                     <p class="text-xs mt-1 text-center font-medium">Receita<br>Bruta</p>
-+ 7056                 </div>
-+ 7057                 <div class="flex flex-col items-center">
-+ 7058                     <div class="bg-red-400 rounded" style="height: ${(dre.totalDeductions / maxValue) * maxHeight}px; width: 60px;"></div>
-+ 7059                     <p class="text-xs mt-1 text-center">Deduções</p>
-+ 7060                 </div>
-+ 7061                 <div class="flex flex-col items-center">
-+ 7062                     <div class="bg-green-400 rounded" style="height: ${(dre.netRevenue / maxValue) * maxHeight}px; width: 60px;"></div>
-+ 7063                     <p class="text-xs mt-1 text-center">Receita<br>Líquida</p>
-+ 7064                 </div>
-+ 7065                 <div class="flex flex-col items-center">
-+ 7066                     <div class="bg-red-500 rounded" style="height: ${(dre.totalCMV / maxValue) * maxHeight}px; width: 60px;"></div>
-+ 7067                     <p class="text-xs mt-1 text-center">CMV</p>
-+ 7068                 </div>
-+ 7069                 <div class="flex flex-col items-center">
-+ 7070                     <div class="bg-purple-400 rounded" style="height: ${Math.max((dre.grossProfit / maxValue) * maxHeight, 0)}px; width: 60px;"></div>
-+ 7071                     <p class="text-xs mt-1 text-center">Lucro<br>Bruto</p>
-+ 7072                 </div>
-+ 7073                 <div class="flex flex-col items-center">
-+ 7074                     <div class="bg-orange-400 rounded" style="height: ${(dre.totalOperationalExpenses / maxValue) * maxHeight}px; width: 60px;"></div>
-+ 7075                     <p class="text-xs mt-1 text-center">Desp.<br>Oper.</p>
-+ 7076                 </div>
-+ 7077                 <div class="flex flex-col items-center">
-+ 7078                     <div class="${dre.netProfit >= 0 ? 'bg-green-600' : 'bg-red-600'} rounded" style="height: ${Math.max(Math.abs(dre.netProfit / maxValue) * maxHeight, 5)}px; width: 60px;"></div>
-+ 7079                     <p class="text-xs mt-1 text-center font-bold">Lucro<br>Líquido</p>
-+ 7080                 </div>
-+ 7081             `;
-+ 7082         }
-+ 7083 
-+ 7084         // Exportar relatório DRE
-+ 7085         function exportDREPDF() {
-+ 7086             const dre = calculateDRE();
-+ 7087             const product = pizzas.find(p => p.id === parseInt(document.getElementById('dreProductSelect')?.value));
-+ 7088             const productName = product ? product.name : 'Produto não selecionado';
-+ 7089             const date = new Date().toLocaleDateString('pt-BR');
-+ 7090 
-+ 7091             let csv = `RELATÓRIO DE DRE - ${date}\n`;
-+ 7092             csv += `Produto: ${productName}\n`;
-+ 7093             csv += `Markup: ${parseFloat(document.getElementById('dreMarkup')?.value) || 100}%\n`;
-+ 7094             csv += `Quantidade: ${parseInt(document.getElementById('dreQuantity')?.value) || 100} unidades\n\n`;
-+ 7095 
-+ 7096             csv += `Descrição,Valor (R$),% s/ Receita Bruta\n`;
-+ 7097             csv += `RECEITA BRUTA,${dre.grossRevenue.toFixed(2)},100.00%\n`;
-+ 7098             csv += `(-) Impostos sobre Venda,${dre.taxSalesValue.toFixed(2)},${dre.percentages.taxSales.toFixed(2)}%\n`;
-+ 7099             csv += `(-) Cancelamentos,${dre.cancellationsValue.toFixed(2)},${dre.percentages.cancellations.toFixed(2)}%\n`;
-+ 7100             csv += `(-) Devoluções,${dre.returnsValue.toFixed(2)},${dre.percentages.returns.toFixed(2)}%\n`;
-+ 7101             csv += `(-) Taxas de Plataforma,${dre.platformFeeValue.toFixed(2)},${dre.percentages.platformFee.toFixed(2)}%\n`;
-+ 7102             csv += `RECEITA LÍQUIDA,${dre.netRevenue.toFixed(2)},${dre.percentages.netRevenue.toFixed(2)}%\n`;
-+ 7103             csv += `(-) CMV,${dre.totalCMV.toFixed(2)},${dre.percentages.totalCMV.toFixed(2)}%\n`;
-+ 7104             csv += `LUCRO BRUTO,${dre.grossProfit.toFixed(2)},${dre.percentages.grossProfit.toFixed(2)}%\n`;
-+ 7105             csv += `(-) Despesas Operacionais,${dre.totalOperationalExpenses.toFixed(2)},${dre.percentages.operationalExpenses.toFixed(2)}%\n`;
-+ 7106             csv += `RESULTADO OPERACIONAL (EBITDA),${dre.operationalResult.toFixed(2)},${dre.percentages.operationalResult.toFixed(2)}%\n`;
-+ 7107             csv += `(-) Despesas Financeiras,${dre.financialExpenses.toFixed(2)},${dre.percentages.financialExpenses.toFixed(2)}%\n`;
-+ 7108             csv += `LUCRO ANTES DOS IMPOSTOS,${dre.profitBeforeTax.toFixed(2)},${dre.percentages.profitBeforeTax.toFixed(2)}%\n`;
-+ 7109             csv += `(-) IRPJ,${dre.irpjValue.toFixed(2)},${(dre.irpjValue / dre.grossRevenue * 100).toFixed(2)}%\n`;
-+ 7110             csv += `(-) CSLL,${dre.csllValue.toFixed(2)},${(dre.csllValue / dre.grossRevenue * 100).toFixed(2)}%\n`;
-+ 7111             csv += `LUCRO LÍQUIDO,${dre.netProfit.toFixed(2)},${dre.percentages.netProfit.toFixed(2)}%\n\n`;
-+ 7112 
-+ 7113             csv += `INDICADORES\n`;
-+ 7114             csv += `Margem Líquida,${dre.netMargin.toFixed(2)}%\n`;
-+ 7115             csv += `Margem Bruta,${dre.grossMargin.toFixed(2)}%\n`;
-+ 7116             csv += `Margem Operacional,${dre.operationalMargin.toFixed(2)}%\n`;
-+ 7117             csv += `Ponto de Equilíbrio,${dre.breakeven} unidades\n`;
-+ 7118 
-+ 7119             downloadCSV(csv, `dre_${productName.replace(/\s+/g, '_')}_${date.replace(/\//g, '-')}.csv`);
-+ 7120             showAlert('Relatório exportado com sucesso!');
-+ 7121         }
-+ 7122 
-  7123         // ==================== ATUALIZAÇÃO DO EXPORT/IMPORT ====================
-  7124         // Override exportProject to include new data
-  7125         const originalExportProject = typeof exportProject === 'function' ? exportProject : null;
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo DRE - Demonstração</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-100 p-6">
+    <div class="max-w-7xl mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">🧪 Módulo de Precificação e DRE - Demonstração</h1>
+        
+        <!-- Módulo DRE -->
+        <div id="dreModule" class="p-6 bg-white rounded-lg shadow-lg mb-6">
+            <h2 class="text-2xl font-bold mb-6 text-gray-800">📊 Módulo de Precificação e DRE</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <!-- Painel de Configuração -->
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <h3 class="text-lg font-semibold mb-4">⚙️ Configuração</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Seleção de Produto -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Produto</label>
+                            <select id="dreProductSelect" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="">Selecione uma pizza...</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Parâmetros de Precificação -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Markup (%)</label>
+                                <input type="number" id="dreMarkup" value="100" min="0" max="1000" class="w-full p-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Quantidade</label>
+                                <input type="number" id="dreQuantity" value="100" min="1" max="1000000" class="w-full p-2 border border-gray-300 rounded-md">
+                            </div>
+                        </div>
+                        
+                        <!-- Parâmetros de Dedução -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Impostos sobre Venda (%)</label>
+                                <input type="number" id="dreTaxSales" value="8.5" step="0.1" class="w-full p-2 border border-gray-300 rounded-md">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Taxa de Plataforma (%)</label>
+                                <input type="number" id="drePlatformFee" value="12" step="0.1" class="w-full p-2 border border-gray-300 rounded-md">
+                            </div>
+                        </div>
+                        
+                        <!-- Regime Tributário -->
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Regime Tributário</label>
+                            <select id="dreTaxRegime" class="w-full p-2 border border-gray-300 rounded-md">
+                                <option value="custom">Personalizado</option>
+                                <option value="simples">Simples Nacional</option>
+                                <option value="presumido">Lucro Presumido</option>
+                                <option value="real">Lucro Real</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Painel de Resultados -->
+                <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                    <h3 class="text-lg font-semibold mb-4">💰 Precificação</h3>
+                    
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">CMV Unitário:</span>
+                            <span id="dreCMVDisplay" class="font-semibold">R$ 0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Markup Aplicado:</span>
+                            <span id="dreMarkupDisplay" class="font-semibold">0.00x</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Preço de Venda:</span>
+                            <span id="dreSalePriceDisplay" class="font-semibold text-green-600">R$ 0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600">Lucro por Unidade:</span>
+                            <span id="dreGrossProfitUnit" class="font-semibold text-green-600">R$ 0.00</span>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-lg font-semibold mt-6 mb-4">📈 Indicadores</h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="text-center p-3 bg-green-50 rounded-lg">
+                            <div class="text-sm text-gray-600">Margem Líquida</div>
+                            <div id="dreNetMargin" class="text-2xl font-bold text-green-600">0.0%</div>
+                        </div>
+                        <div class="text-center p-3 bg-blue-50 rounded-lg">
+                            <div class="text-sm text-gray-600">Ponto de Equilíbrio</div>
+                            <div id="dreBreakeven" class="text-2xl font-bold text-blue-600">0 un.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabela DRE -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-4">📋 Demonstração do Resultado do Exercício</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white border border-gray-200">
+                        <thead class="bg-gray-100">
+                            <tr>
+                                <th class="py-3 px-4 text-left font-semibold text-gray-700">Descrição</th>
+                                <th class="py-3 px-4 text-right font-semibold text-gray-700">Valor (R$)</th>
+                                <th class="py-3 px-4 text-right font-semibold text-gray-700">% s/ Receita Bruta</th>
+                                <th class="py-3 px-4 text-center font-semibold text-gray-700">Impacto</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dreTableBody">
+                            <!-- Preenchido dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Botões de Ação -->
+            <div class="flex flex-wrap gap-3 mb-6">
+                <button id="dreApplyTaxRegime" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+                    <i class="fas fa-balance-scale mr-2"></i>Aplicar Regime
+                </button>
+                <button id="dreLoadCosts" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+                    <i class="fas fa-download mr-2"></i>Carregar Custos do Sistema
+                </button>
+                <button id="dreExportCSV" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition">
+                    <i class="fas fa-file-csv mr-2"></i>Exportar CSV
+                </button>
+                <button id="dreExportPDF" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition">
+                    <i class="fas fa-file-pdf mr-2"></i>Exportar PDF
+                </button>
+            </div>
+            
+            <!-- Análise de Sensibilidade -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-4">📊 Análise de Sensibilidade</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                        <div class="text-sm text-blue-700 font-medium mb-1">+10% Markup</div>
+                        <div id="dreSensMarkup" class="text-lg font-bold">R$ 0.00</div>
+                    </div>
+                    <div class="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div class="text-sm text-green-700 font-medium mb-1">+20% Quantidade</div>
+                        <div id="dreSensQuantity" class="text-lg font-bold">R$ 0.00</div>
+                    </div>
+                    <div class="p-4 bg-orange-50 rounded-lg border border-orange-200">
+                        <div class="text-sm text-orange-700 font-medium mb-1">-10% CMV</div>
+                        <div id="dreSensCMV" class="text-lg font-bold">R$ 0.00</div>
+                    </div>
+                    <div class="p-4 bg-purple-50 rounded-lg border border-purple-200">
+                        <div class="text-sm text-purple-700 font-medium mb-1">-15% Despesas</div>
+                        <div id="dreSensExpenses" class="text-lg font-bold">R$ 0.00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Composição do Preço -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-4">🎨 Composição do Preço</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div id="drePriceComposition" class="space-y-2">
+                        <!-- Preenchido dinamicamente -->
+                    </div>
+                    <div id="dreWaterfallChart" class="flex items-end justify-center h-64">
+                        <!-- Gráfico waterfall -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Painel de Debug (opcional) -->
+        <div class="p-4 bg-gray-800 text-white rounded-lg text-sm">
+            <div class="font-mono">
+                <div>Estado do Módulo: <span id="status" class="text-green-400">Pronto</span></div>
+                <div>Último cálculo: <span id="lastCalc">Nenhum</span></div>
+                <button onclick="console.log(window.DREModule.getState())" class="mt-2 px-3 py-1 bg-gray-700 rounded">
+                    Ver Estado no Console
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Carrega o módulo DRE
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializa variáveis globais necessárias
+            window.pizzas = [
+                { id: 1, name: 'Pizza Margherita', totalCost: 15.50 },
+                { id: 2, name: 'Pizza Pepperoni', totalCost: 18.75 },
+                { id: 3, name: 'Pizza Quatro Queijos', totalCost: 22.30 },
+                { id: 4, name: 'Pizza Calabresa', totalCost: 17.90 },
+                { id: 5, name: 'Pizza Portuguesa', totalCost: 20.45 }
+            ];
+            
+            window.operationalCosts = {
+                rent: 2000,
+                electricity: 500,
+                water: 200,
+                gas: 300,
+                internet: 100,
+                salaries: 5000,
+                marketing: 500,
+                cleaning: 200,
+                bankFees: 100,
+                others: 200
+            };
+            
+            // Define showAlert se não existir
+            if (typeof showAlert !== 'function') {
+                window.showAlert = function(message, type = 'info') {
+                    const alertDiv = document.createElement('div');
+                    alertDiv.className = `fixed top-4 right-4 p-4 rounded-md shadow-lg z-50 ${
+                        type === 'error' ? 'bg-red-100 text-red-800 border-red-300' :
+                        type === 'success' ? 'bg-green-100 text-green-800 border-green-300' :
+                        type === 'warning' ? 'bg-yellow-100 text-yellow-800 border-yellow-300' :
+                        'bg-blue-100 text-blue-800 border-blue-300'
+                    } border`;
+                    alertDiv.innerHTML = `
+                        <div class="flex items-center">
+                            <i class="fas ${
+                                type === 'error' ? 'fa-exclamation-circle' :
+                                type === 'success' ? 'fa-check-circle' :
+                                type === 'warning' ? 'fa-exclamation-triangle' :
+                                'fa-info-circle'
+                            } mr-2"></i>
+                            <span>${message}</span>
+                        </div>
+                    `;
+                    document.body.appendChild(alertDiv);
+                    
+                    setTimeout(() => {
+                        alertDiv.remove();
+                    }, 3000);
+                };
+            }
+            
+            console.log('Ambiente configurado para teste do módulo DRE');
+            document.getElementById('status').textContent = 'Inicializando...';
+        });
+    </script>
+    
+    <!-- Inclui o módulo DRE -->
+    <script src="dre-module.js"></script>
+</body>
+</html>
